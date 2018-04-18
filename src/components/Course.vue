@@ -1,0 +1,53 @@
+<template lang="html">
+  <div class="course" @click="selectCourse" :class="{'course--selected': selected}">{{ course.gwid }}-{{ course.section }} {{ course.course_name }}</div>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  props: ['course'],
+  computed: {
+    ...mapGetters(['newSchedule']),
+    selected() {
+      return this.newSchedule.filter(eachCourse => eachCourse == this.course)
+        .length > 0
+        ? true
+        : false
+    }
+  },
+  methods: {
+    ...mapActions(['addCourse']),
+    selectCourse() {
+      console.log(this.course)
+
+      // check if course has already been added
+      let courseExists = this.newSchedule.filter(
+        course => course == this.course
+      )
+
+      if (courseExists.length === 0) {
+        this.addCourse(this.course)
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.course {
+  padding: 10px 0;
+
+  &:hover {
+    background-color: yellow;
+    cursor: pointer;
+  }
+
+  &--selected {
+    background-color: #eee;
+    font-style: italic;
+  }
+}
+
+
+</style>
