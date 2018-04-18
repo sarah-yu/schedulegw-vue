@@ -6,41 +6,41 @@
       <div class="week__day week__day--1">
         <h3>SUN</h3>
         <div class="week__courses">
-          <div v-for="course in day1_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day1_start, course.day1_end)">{{ course.course_name }}: {{ course.day1_start }} - {{ course.day1_end }}</div>
+          <div v-for="course in dayn_courses(1)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day1_start, course.day1_end)">{{ course.course_name }}: {{ course.day1_start }} - {{ course.day1_end }}</div>
         </div>
       </div>
       <div class="week__day week__day--2">
         <h3>MON</h3>
         <div class="week__courses">
-          <div v-for="course in day2_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day2_start, course.day2_end)">{{ course.course_name }}: {{ course.day2_start }} - {{ course.day2_end }}</div>
+          <div v-for="course in dayn_courses(2)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day2_start, course.day2_end)">{{ course.course_name }}: {{ course.day2_start }} - {{ course.day2_end }}</div>
         </div>
       </div>
       <div class="week__day week__day--3">
         <h3>TUE</h3>
         <div class="week__courses">
-          <div v-for="course in day3_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day3_start, course.day3_end)">{{ course.course_name }}: {{ course.day3_start }} - {{ course.day3_end }}</div>
+          <div v-for="course in dayn_courses(3)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day3_start, course.day3_end)">{{ course.course_name }}: {{ course.day3_start }} - {{ course.day3_end }}</div>
         </div>
       </div>
       <div class="week__day week__day--4">
         <h3>WED</h3>
         <div class="week__courses">
-          <div v-for="course in day4_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day4_start, course.day4_end)">{{ course.course_name }}: {{ course.day4_start }} - {{ course.day4_end }}</div>
+          <div v-for="course in dayn_courses(4)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day4_start, course.day4_end)">{{ course.course_name }}: {{ course.day4_start }} - {{ course.day4_end }}</div>
         </div>
       </div>
       <div class="week__day week__day--5">
         <h3>THU</h3>
         <div class="week__courses">
-          <div v-for="course in day5_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day5_start, course.day5_end)">{{ course.course_name }}: {{ course.day5_start }} - {{ course.day5_end }}</div>
+          <div v-for="course in dayn_courses(5)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day5_start, course.day5_end)">{{ course.course_name }}: {{ course.day5_start }} - {{ course.day5_end }}</div>
         </div>
       </div>
       <div class="week__day week__day--6">
         <h3>FRI</h3>
-        <div v-for="course in day6_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day6_start, course.day6_end)">{{ course.course_name }}: {{ course.day6_start }} - {{ course.day6_end }}</div>
+        <div v-for="course in dayn_courses(6)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day6_start, course.day6_end)">{{ course.course_name }}: {{ course.day6_start }} - {{ course.day6_end }}</div>
       </div>
       <div class="week__day week__day--7">
         <h3>SAT</h3>
         <div class="week__courses">
-          <div v-for="course in day7_courses" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day7_start, course.day7_end)">{{ course.course_name }}: {{ course.day7_start }} - {{ course.day7_end }}</div>
+          <div v-for="course in dayn_courses(7)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day7_start, course.day7_end)">{{ course.course_name }}: {{ course.day7_start }} - {{ course.day7_end }}</div>
         </div>
       </div>
     </div>
@@ -57,34 +57,6 @@ export default {
       return this.newSchedule.reduce((acc, curr) => {
         return acc + parseInt(curr.hours)
       }, 0)
-    },
-    day1_courses() {
-      // sun
-      return this.newSchedule.filter(course => course.day1_start != null)
-    },
-    day2_courses() {
-      // mon
-      return this.newSchedule.filter(course => course.day2_start != null)
-    },
-    day3_courses() {
-      // tue
-      return this.newSchedule.filter(course => course.day3_start != null)
-    },
-    day4_courses() {
-      // wed
-      return this.newSchedule.filter(course => course.day4_start != null)
-    },
-    day5_courses() {
-      // thu
-      return this.newSchedule.filter(course => course.day5_start != null)
-    },
-    day6_courses() {
-      // fri
-      return this.newSchedule.filter(course => course.day6_start != null)
-    },
-    day7_courses() {
-      // sat
-      return this.newSchedule.filter(course => course.day7_start != null)
     }
   },
   methods: {
@@ -93,6 +65,10 @@ export default {
     }),
     removeCourse(course) {
       this.removeFromSchedule(course)
+    },
+    dayn_courses(n) {
+      let dayn_start = `day${n}_start`
+      return this.newSchedule.filter(course => course[dayn_start] != null)
     },
     placeCourse(start, end) {
       // place course on schedule according to start and end time
@@ -105,10 +81,11 @@ export default {
 
       let top = start.slice(-2) + 'px'
       let height = this.getDuration(start, end) + 'px'
+      let backgroundColor = this.getColor() // THIS IS NOT WORKING CORRECTLY
 
       return {
         position: 'absolute',
-        backgroundColor: 'red',
+        backgroundColor: backgroundColor,
         padding: '0 30px',
         'grid-area': hour, // place course in correct row based on starting hour
         top: top, // add additional px to top based on starting minutes
@@ -137,6 +114,21 @@ export default {
     },
     getDuration(start, end) {
       return (end - start) * 0.01 * 60 // if each hour is 60px
+    },
+    getColor() {
+      const colors = [
+        '#F7AA97',
+        '#ED9282',
+        '#DE7E73',
+        '#CFAA9E',
+        '#77AAAD',
+        '#6E7783',
+        '#D8E6E7',
+        '#9DC3C1'
+      ]
+
+      let randomColor = Math.floor(Math.random() * colors.length)
+      return colors[randomColor]
     }
   }
 }
@@ -160,8 +152,7 @@ export default {
   &__day {
     border: 1px dotted black;
     width: 14%;
-    height: 80vh;
-    padding: 0 5px;
+    // height: 80vh;
 
     h3 {
       display: flex;
@@ -194,8 +185,10 @@ export default {
   &__course {
     font-size: 12px;
     background-color: #eee;
-    padding: 10px 5px;
+    overflow: hidden;
+    // padding: 10px 5px;
     margin: 0 .5rem;
+    width: 35%; // ?????
 
     &:hover {
       cursor: pointer;
