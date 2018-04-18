@@ -7,13 +7,15 @@
 
 <script>
 import Course from './Course.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters({
+      getCourses: 'courses'
+    }),
     courses() {
-      let courses = this.$store.getters.courses
-
-      return this.$store.getters.courses
+      return this.getCourses
     }
   },
   created() {
