@@ -20,12 +20,24 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    ADD_COURSE: (state, newCourse) => state.newSchedule.push(newCourse),
-    REMOVE_COURSE: (state, course) =>
-      state.newSchedule.splice(state.newSchedule.indexOf(course), 1),
+    ADD_COURSE: (state, newCourse) => {
+      state.newSchedule.push(newCourse)
+
+      // default conflicts property to false
+      let justAdded = state.newSchedule.find(course => course == newCourse)
+      justAdded.conflicts = false
+    },
+    REMOVE_COURSE: (state, course) => {
+      course.conflicts = false // reset conflicts to false
+      state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
+    },
     ASSIGN_COLOR: (state, { course, color }) => {
       let theCourse = state.newSchedule.find(c => c == course)
       theCourse.color = color
+    },
+    ADD_CONFLICT: (state, { course1, course2 }) => {
+      course1.conflicts = true
+      course2.conflicts = true
     }
   },
   actions: {
@@ -50,7 +62,9 @@ export default new Vuex.Store({
         course: course,
         color: colors[randomColor]
       })
-    }
+    },
+    addConflict: ({ commit }, { course1, course2 }) =>
+      commit('ADD_CONFLICT', { course1, course2 })
   },
   getters: {
     courses: state => state.courses,

@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import CourseList from './components/CourseList.vue'
-import Week from './components/Week.vue'
+import CourseList from './components/CourseList/CourseList.vue'
+import Week from './components/Week/Week.vue'
 
 export default {
   components: {

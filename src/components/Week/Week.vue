@@ -16,7 +16,7 @@
             @click="removeCourse(course)"
             :style="placeCourse(course, course[`day${index+1}_start`], course[`day${index+1}_end`])"
             class="week__course">
-            {{ course.course_name }}: {{ course[`day${index+1}_start`] }} - {{ course[`day${index+1}_end`] }}
+            {{ course.id }} {{ course.course_name }}: {{ course[`day${index+1}_start`] }} - {{ course[`day${index+1}_end`] }}
           </div>
         </div>
       </div>
@@ -43,7 +43,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      removeFromSchedule: 'removeCourse'
+      removeFromSchedule: 'removeCourse',
+      addConflict: 'addConflict'
     }),
     removeCourse(course) {
       this.removeFromSchedule(course)
@@ -51,7 +52,14 @@ export default {
     dayn_courses(n) {
       // place course in correct day(s) of week
       let dayn_start = `day${n}_start`
-      return this.newSchedule.filter(course => course[dayn_start] != null)
+      let courses = this.newSchedule.filter(
+        course => course[dayn_start] != null
+      )
+
+      // check for conflicts
+      this.checkConflicts(courses, n)
+
+      return courses
     },
     placeCourse(course, start, end) {
       // place course on schedule according to start and end time
@@ -66,9 +74,7 @@ export default {
       let height = this.getDuration(start, end) + 'px'
 
       return {
-        position: 'absolute',
-        backgroundColor: course.color,
-        padding: '0 30px',
+        backgroundColor: course.conflicts ? 'red' : course.color,
         'grid-area': hour, // place course in correct row based on starting hour
         top: top, // add additional px to top based on starting minutes
         height: height // height of course div based on end time
@@ -96,6 +102,33 @@ export default {
     },
     getDuration(start, end) {
       return (end - start) * 0.01 * 60 // if each hour is 60px
+    },
+    checkConflicts(courses, n) {
+      for (let i = 0; i < courses.length; i++) {
+        for (let j = 0; j < courses.length; j++) {
+          let start1 = courses[i][`day${n}_start`]
+          let start2 = courses[j][`day${n}_start`]
+          let end1 = courses[i][`day${n}_end`]
+          let end2 = courses[j][`day${n}_end`]
+
+          if (courses[i] != courses[j]) {
+            if (
+              start1 == start2 ||
+              end1 == end2 ||
+              (start1 < start2 && end1 > end2) ||
+              (start2 < start1 && end2 > end1)
+            ) {
+              console.log('CONFLICT!')
+              this.addConflict({
+                course1: courses[i],
+                course2: courses[j]
+              })
+            } else {
+              console.log('OKAY!')
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -119,7 +152,6 @@ export default {
   &__day {
     border: 1px dotted black;
     width: 14%;
-    // height: 80vh;
 
     h3 {
       display: flex;
@@ -150,12 +182,9 @@ export default {
   }
 
   &__course {
+    position: absolute;
     font-size: 12px;
-    background-color: #eee;
     overflow: hidden;
-    // padding: 10px 5px;
-    margin: 0 .5rem;
-    width: 35%; // ?????
 
     &:hover {
       cursor: pointer;
