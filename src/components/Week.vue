@@ -6,6 +6,11 @@
       <div v-for="(day, index) in days" class="week__day">
         <h3>{{ day }}</h3>
         <div class="week__courses">
+          <!--  HOUR GRID LINES -->
+          <div v-for="n in 14" class="week__hours">
+            {{ index == 0 ? (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') : '' }}
+          </div>
+          <!--  COURSES BY DAY OF WEEK -->
           <div
             v-for="course in dayn_courses(index + 1)"
             @click="removeCourse(course)"
@@ -25,7 +30,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] // for generating and labeling columns for days of the week
     }
   },
   computed: {
@@ -44,6 +49,7 @@ export default {
       this.removeFromSchedule(course)
     },
     dayn_courses(n) {
+      // place course in correct day(s) of week
       let dayn_start = `day${n}_start`
       return this.newSchedule.filter(course => course[dayn_start] != null)
     },
@@ -169,6 +175,19 @@ export default {
 
     &:hover {
       cursor: pointer;
+    }
+  }
+
+  &__hours {
+    font-size: .8rem;
+    text-transform: uppercase;
+
+    &:first-of-type {
+      border-top: 1px dashed black;
+    }
+
+    &:not(:last-of-type) {
+      border-bottom: 1px dashed black;
     }
   }
 }
