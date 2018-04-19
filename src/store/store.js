@@ -24,8 +24,6 @@ export default new Vuex.Store({
     REMOVE_COURSE: (state, course) =>
       state.newSchedule.splice(state.newSchedule.indexOf(course), 1),
     ASSIGN_COLOR: (state, { course, color }) => {
-      console.log(`ASSIGN ${course.id} THE COLOR: ${color}`)
-
       let theCourse = state.newSchedule.find(c => c == course)
       theCourse.color = color
     }
@@ -34,8 +32,25 @@ export default new Vuex.Store({
     loadCourses: ({ commit }) => commit('LOAD_COURSES'),
     addCourse: ({ commit }, newCourse) => commit('ADD_COURSE', newCourse),
     removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
-    assignColor: ({ commit }, { course, color }) =>
-      commit('ASSIGN_COLOR', { course, color })
+    assignColor: ({ commit }, course) => {
+      const colors = [
+        '#F7AA97',
+        '#ED9282',
+        '#DE7E73',
+        '#CFAA9E',
+        '#77AAAD',
+        '#6E7783',
+        '#D8E6E7',
+        '#9DC3C1'
+      ]
+
+      let randomColor = Math.floor(Math.random() * colors.length)
+
+      commit('ASSIGN_COLOR', {
+        course: course,
+        color: colors[randomColor]
+      })
+    }
   },
   getters: {
     courses: state => state.courses,

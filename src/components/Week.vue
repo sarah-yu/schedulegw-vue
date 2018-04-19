@@ -64,11 +64,10 @@ export default {
 
       let top = start.slice(-2) + 'px'
       let height = this.getDuration(start, end) + 'px'
-      let backgroundColor = course.color ? course.color : this.getColor()
 
       return {
         position: 'absolute',
-        backgroundColor: backgroundColor,
+        backgroundColor: course.color,
         padding: '0 30px',
         'grid-area': hour, // place course in correct row based on starting hour
         top: top, // add additional px to top based on starting minutes
@@ -97,21 +96,6 @@ export default {
     },
     getDuration(start, end) {
       return (end - start) * 0.01 * 60 // if each hour is 60px
-    },
-    getColor() {
-      const colors = [
-        '#F7AA97',
-        '#ED9282',
-        '#DE7E73',
-        '#CFAA9E',
-        '#77AAAD',
-        '#6E7783',
-        '#D8E6E7',
-        '#9DC3C1'
-      ]
-
-      let randomColor = Math.floor(Math.random() * colors.length)
-      return colors[randomColor]
     }
   }
 }
