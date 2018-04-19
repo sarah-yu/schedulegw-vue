@@ -3,44 +3,16 @@
     <h2 class="week__header">Week</h2>
     <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p>
     <div class="week__days">
-      <div class="week__day week__day--1">
-        <h3>SUN</h3>
+      <div v-for="(day, index) in days" class="week__day">
+        <h3>{{ day }}</h3>
         <div class="week__courses">
-          <div v-for="course in dayn_courses(1)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day1_start, course.day1_end)">{{ course.course_name }}: {{ course.day1_start }} - {{ course.day1_end }}</div>
-        </div>
-      </div>
-      <div class="week__day week__day--2">
-        <h3>MON</h3>
-        <div class="week__courses">
-          <div v-for="course in dayn_courses(2)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day2_start, course.day2_end)">{{ course.course_name }}: {{ course.day2_start }} - {{ course.day2_end }}</div>
-        </div>
-      </div>
-      <div class="week__day week__day--3">
-        <h3>TUE</h3>
-        <div class="week__courses">
-          <div v-for="course in dayn_courses(3)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day3_start, course.day3_end)">{{ course.course_name }}: {{ course.day3_start }} - {{ course.day3_end }}</div>
-        </div>
-      </div>
-      <div class="week__day week__day--4">
-        <h3>WED</h3>
-        <div class="week__courses">
-          <div v-for="course in dayn_courses(4)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day4_start, course.day4_end)">{{ course.course_name }}: {{ course.day4_start }} - {{ course.day4_end }}</div>
-        </div>
-      </div>
-      <div class="week__day week__day--5">
-        <h3>THU</h3>
-        <div class="week__courses">
-          <div v-for="course in dayn_courses(5)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day5_start, course.day5_end)">{{ course.course_name }}: {{ course.day5_start }} - {{ course.day5_end }}</div>
-        </div>
-      </div>
-      <div class="week__day week__day--6">
-        <h3>FRI</h3>
-        <div v-for="course in dayn_courses(6)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day6_start, course.day6_end)">{{ course.course_name }}: {{ course.day6_start }} - {{ course.day6_end }}</div>
-      </div>
-      <div class="week__day week__day--7">
-        <h3>SAT</h3>
-        <div class="week__courses">
-          <div v-for="course in dayn_courses(7)" @click="removeCourse(course)" class="week__course" :style="placeCourse(course.day7_start, course.day7_end)">{{ course.course_name }}: {{ course.day7_start }} - {{ course.day7_end }}</div>
+          <div
+            v-for="course in dayn_courses(index + 1)"
+            @click="removeCourse(course)"
+            :style="placeCourse(course[`day${index+1}_start`], course[`day${index+1}_end`])"
+            class="week__course">
+            {{ course.course_name }}: {{ course[`day${index+1}_start`] }} - {{ course[`day${index+1}_end`] }}
+          </div>
         </div>
       </div>
     </div>
@@ -51,6 +23,11 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data() {
+    return {
+      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+    }
+  },
   computed: {
     ...mapGetters(['newSchedule']),
     totalHours() {
