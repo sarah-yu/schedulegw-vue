@@ -13,23 +13,19 @@ export default new Vuex.Store({
     LOAD_COURSES: state => {
       axios
         .get('/courses')
-        .then(res => {
-          console.log(res.data)
-
-          state.courses = res.data
-        })
+        .then(res => (state.courses = res.data))
         .catch(err => console.log(err))
     },
     ADD_COURSE: (state, newCourse) => {
+      newCourse.conflicts = false // default conflicts to false
       state.newSchedule.push(newCourse)
-
-      // default conflicts property to false
-      let justAdded = state.newSchedule.find(course => course == newCourse)
-      justAdded.conflicts = false
     },
     REMOVE_COURSE: (state, course) => {
       course.conflicts = false // reset conflicts to false
       state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
+
+      console.log('JUST REMOVED COURSE:')
+      console.log(course)
     },
     ASSIGN_COLOR: (state, { course, color }) => {
       let theCourse = state.newSchedule.find(c => c == course)
