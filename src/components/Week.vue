@@ -14,7 +14,7 @@
           <div
             v-for="course in dayn_courses(index + 1)"
             @click="removeCourse(course)"
-            :style="placeCourse(course[`day${index+1}_start`], course[`day${index+1}_end`])"
+            :style="placeCourse(course, course[`day${index+1}_start`], course[`day${index+1}_end`])"
             class="week__course">
             {{ course.course_name }}: {{ course[`day${index+1}_start`] }} - {{ course[`day${index+1}_end`] }}
           </div>
@@ -53,7 +53,7 @@ export default {
       let dayn_start = `day${n}_start`
       return this.newSchedule.filter(course => course[dayn_start] != null)
     },
-    placeCourse(start, end) {
+    placeCourse(course, start, end) {
       // place course on schedule according to start and end time
       let hour
       if (start.length === 3) {
@@ -64,7 +64,7 @@ export default {
 
       let top = start.slice(-2) + 'px'
       let height = this.getDuration(start, end) + 'px'
-      let backgroundColor = this.getColor() // THIS IS NOT WORKING CORRECTLY
+      let backgroundColor = course.color ? course.color : this.getColor()
 
       return {
         position: 'absolute',

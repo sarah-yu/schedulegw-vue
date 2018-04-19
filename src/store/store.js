@@ -20,29 +20,22 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    ADD_COURSE: (state, newCourse) => {
-      state.newSchedule.push(newCourse)
+    ADD_COURSE: (state, newCourse) => state.newSchedule.push(newCourse),
+    REMOVE_COURSE: (state, course) =>
+      state.newSchedule.splice(state.newSchedule.indexOf(course), 1),
+    ASSIGN_COLOR: (state, { course, color }) => {
+      console.log(`ASSIGN ${course.id} THE COLOR: ${color}`)
 
-      console.log('NEW SCHEDULE:')
-      console.log(state.newSchedule)
-    },
-    REMOVE_COURSE: (state, course) => {
-      state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
-
-      console.log('UPDATED SCHEDULE:')
-      console.log(state.newSchedule)
+      let theCourse = state.newSchedule.find(c => c == course)
+      theCourse.color = color
     }
   },
   actions: {
-    loadCourses: ({ commit }) => {
-      commit('LOAD_COURSES')
-    },
-    addCourse: ({ commit }, newCourse) => {
-      commit('ADD_COURSE', newCourse)
-    },
-    removeCourse: ({ commit }, course) => {
-      commit('REMOVE_COURSE', course)
-    }
+    loadCourses: ({ commit }) => commit('LOAD_COURSES'),
+    addCourse: ({ commit }, newCourse) => commit('ADD_COURSE', newCourse),
+    removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
+    assignColor: ({ commit }, { course, color }) =>
+      commit('ASSIGN_COLOR', { course, color })
   },
   getters: {
     courses: state => state.courses,

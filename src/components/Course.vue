@@ -17,7 +17,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addCourse']),
+    ...mapActions(['addCourse', 'assignColor']),
     selectCourse() {
       console.log(this.course)
 
@@ -27,8 +27,28 @@ export default {
       )
 
       if (courseExists.length === 0) {
-        this.addCourse(this.course)
+        this.addCourse(this.course) // add course to newSchedule array
+        this.assignColor({
+          // assign the course a random color
+          course: this.course,
+          color: this.getColor()
+        })
       }
+    },
+    getColor() {
+      const colors = [
+        '#F7AA97',
+        '#ED9282',
+        '#DE7E73',
+        '#CFAA9E',
+        '#77AAAD',
+        '#6E7783',
+        '#D8E6E7',
+        '#9DC3C1'
+      ]
+
+      let randomColor = Math.floor(Math.random() * colors.length)
+      return colors[randomColor]
     }
   }
 }
