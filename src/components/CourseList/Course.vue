@@ -19,6 +19,7 @@ export default {
   methods: {
     ...mapActions(['addCourse', 'assignColor']),
     selectCourse() {
+      console.log('SELECTED COURSE:')
       console.log(this.course)
 
       // check if course has already been added
