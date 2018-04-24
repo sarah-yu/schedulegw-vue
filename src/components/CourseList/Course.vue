@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="course" @click="selectCourse" :class="{'course--selected': selected}">{{ course.gwid }}-{{ course.section }} {{ course.course_name }}</div>
+  <div class="course" @click="selectCourse" :class="{'course--selected': selected}">{{ course.gwid }}-{{ course.section }} {{ course.course_name }} <span v-if="course.prof_id"><a v-bind:href="`https://my.law.gwu.edu/Evaluations/page%20library/ByFaculty.aspx?Source=%2fEvaluations%2fdefault.aspx&IID=${course.prof_id}`" target="_blank">Reviews</a></span></div>
 </template>
 
 <script>
