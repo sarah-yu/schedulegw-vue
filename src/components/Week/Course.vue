@@ -4,16 +4,15 @@
     @mouseenter="mouseenter"
     @mouseleave="mouseleave"
     :style="placeCourse(course, course[`day${day+1}_start`], course[`day${day+1}_end`])"
-    class="course-block">
-    <div v-if="!showFinalInfo">
-      <span class="course-block__id">{{ course.gwid }}-{{ course.section }}</span>
+    class="course-block"
+    :class="`course-block--day${day}`">
+      <span class="course-block__id">{{ course.gwid }}-{{ course.section }} <i v-if="course.closed" class="fas fa-lock"></i></span>
       <span class="course-block__name">{{ course.course_name }}</span>
-      <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
-    </div>
-    <div v-else>
-      <span class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
-    </div>
-    <!-- <div class="course-block__remove"><i class="far fa-times-circle fa-lg"></i></div> -->
+      <div v-if="showFinalInfo" >
+        <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+        <span class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
+      </div>
+    <div class="course-block__remove"><i class="fas fa-times"></i></div>
   </div>
 </template>
 
@@ -60,7 +59,10 @@ export default {
       let height = this.getDuration(start, end) + 'px'
 
       return {
-        backgroundColor: course.conflicts ? 'red' : course.color,
+        background: course.conflicts
+          ? 'repeating-linear-gradient(135deg, #777, #777 .15rem, #ab9964 0, #ab9964 .85rem)'
+          : course.color,
+        border: course.conflicts ? '1px solid #003b5b' : '',
         'grid-area': hour, // place course in correct row based on starting hour
         top: top, // add additional px to top based on starting minutes
         height: height // height of course div based on end time
@@ -96,44 +98,35 @@ export default {
 
 <style lang="scss" scoped>
 .course-block {
+  color: var(--color-grey-dark-1);
   font-size: var(--font-xs);
   overflow: scroll;
   padding: .4rem;
   position: absolute;
-  // z-index: 2;
   width: 100%;
+  z-index: 2;
 
   span {
     display: block;
   }
 
-  &__name {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
-
   &__remove {
+    display: none;
     position: absolute;
-    top: .2rem;
-    right: .2rem;
-    // width: 2rem;
-    // height: 2rem;
-    // border-radius: 50%;
-    // background-color: #fff;
-    // border: 1px solid var(--color-grey-dark-3);
+    top: .3rem;
+    right: .5rem;
     color: var(--color-grey-dark-1);
     z-index: 9999;
-    // display: none;
   }
 
   &:hover {
     cursor: pointer;
+    transform: scale(1.5);
+    z-index: 1000;
   }
 
-  // &:hover > &__remove {
-  //   display: block;
-  // }
+  &:hover > &__remove {
+    display: block;
+  }
 }
 </style>

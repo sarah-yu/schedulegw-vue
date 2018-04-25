@@ -5,7 +5,11 @@
       {{ day == 0 ? (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') : '' }}
     </div>
     <!--  COURSES BY DAY OF WEEK -->
-    <app-course v-for="course in dayn_courses(day + 1)" :course="course" :day="day" :key="course.id"></app-course>
+    <app-course
+      v-for="course in dayn_courses(day + 1)"
+      :course="course"
+      :day="day"
+      :key="course.id"></app-course>
   </div>
 </template>
 
@@ -94,7 +98,7 @@ export default {
 <style lang="scss">
 .courses {
   display: grid;
-  grid-template-columns: 100%;
+  grid-template-columns: 98%;
   grid-auto-rows: 5rem;
   grid-template-areas:
     "eight"

@@ -2,7 +2,11 @@
   <div class="week">
     <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
-      <div v-for="(day, index) in days" class="week__day">
+      <div
+        v-for="(day, index) in days"
+        class="week__day"
+        v-if="!hideWeekend(index)"
+        :style="width">
         <h3>{{ day }}</h3>
         <app-courses :day="index"></app-courses>
       </div>
@@ -17,7 +21,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // for generating and labeling columns for days of the week
+      days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // for generating and labeling columns for days of the week
+      daysCount: 7
     }
   },
   computed: {
@@ -26,6 +31,31 @@ export default {
       return this.newSchedule.reduce((acc, curr) => {
         return acc + parseInt(curr.hours)
       }, 0)
+    },
+    width() {
+      return {
+        width: 100 / this.daysCount + '%'
+      }
+    }
+  },
+  methods: {
+    hideWeekend(dayIndex) {
+      if (dayIndex == 0 || dayIndex == 6) {
+        console.log('THIS IS A WEEKEND')
+
+        let n = dayIndex + 1
+        let day = `day${n}_start`
+
+        let courses = this.newSchedule.filter(course => course[day] != null)
+
+        if (courses.length < 1) {
+          this.daysCount = 5
+          return true
+        } else {
+          this.daysCount = 7
+          return false
+        }
+      }
     }
   },
   components: {
@@ -51,8 +81,6 @@ export default {
   }
 
   &__day {
-    width: 14%;
-
     h3 {
       display: flex;
       justify-content: center;
