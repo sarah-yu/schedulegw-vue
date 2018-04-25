@@ -1,7 +1,9 @@
 <template>
   <div class="course-list">
     <h2 class="course-list__header">Course List</h2>
-    <app-course v-for="course in courses" :course="course" :key="course.id"></app-course>
+    <div class="course-list__container">
+      <app-course v-for="course in courses" :course="course" :key="course.id"></app-course>
+    </div>
   </div>
 </template>
 
@@ -29,10 +31,23 @@ export default {
 
 <style lang="scss">
 .course-list {
-  height: 90vh;
-  overflow-y: scroll;
-  padding: 0 30px;
-  border: 1px solid black;
-  margin-right: 30px;
+  flex: 1;
+  background-color: var(--color-grey-light-1);
+
+  &__header {
+    color: var(--color-primary);
+    font-size: var(--font-s);
+    text-align: center;
+    padding: 2rem 0 1rem 0;
+  }
+
+  &__container {
+    height: 90vh;
+    overflow-y: scroll;
+
+    @media only screen and (max-width: 800px) {
+      height: 20vh;
+    }
+  }
 }
 </style>

@@ -1,7 +1,6 @@
 <template lang="html">
   <div class="week">
-    <h2 class="week__header">Week</h2>
-    <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p>
+    <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
       <div v-for="(day, index) in days" class="week__day">
         <h3>{{ day }}</h3>
@@ -18,7 +17,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] // for generating and labeling columns for days of the week
+      days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // for generating and labeling columns for days of the week
     }
   },
   computed: {
@@ -37,8 +36,9 @@ export default {
 
 <style lang="scss" scoped>
 .week {
-  flex: 1;
-  border: 1px solid black;
+  flex: 2;
+  height: 90vh;
+  padding: 3rem;
 
   &__header,
   &__total-hours {
@@ -51,12 +51,13 @@ export default {
   }
 
   &__day {
-    border: 1px dotted black;
     width: 14%;
 
     h3 {
       display: flex;
       justify-content: center;
+      color: var(--color-grey-dark-2);
+      font-size: var(--font-s);
     }
   }
 }

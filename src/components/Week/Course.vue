@@ -3,7 +3,9 @@
     @click="removeCourse(course)"
     :style="placeCourse(course, course[`day${day+1}_start`], course[`day${day+1}_end`])"
     class="course-block">
-    {{ course.id }} {{ course.course_name }}: {{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}
+    <span class="course-block__id">{{ course.id }}</span>
+    <span class="course-block__name">{{ course.course_name }}</span>
+    <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
   </div>
 </template>
 
@@ -28,7 +30,7 @@ export default {
         hour = this.getHour(start.slice(0, 2))
       }
 
-      let top = start.slice(-2) + 'px'
+      let top = start.slice(-2) * (5 / 6) + 'px'
       let height = this.getDuration(start, end) + 'px'
 
       return {
@@ -59,7 +61,8 @@ export default {
       return hours[time]
     },
     getDuration(start, end) {
-      return (end - start) * 0.01 * 60 // if each hour is 60px
+      // return (end - start) * 0.01 * 60 // if each hour is 60px
+      return (end - start) * 0.01 * 50
     }
   }
 }
@@ -67,9 +70,28 @@ export default {
 
 <style lang="scss" scoped>
 .course-block {
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+
+  font-size: var(--font-s);
+  padding: .4rem;
   position: absolute;
-  font-size: 12px;
-  overflow: hidden;
+  z-index: 2;
+  width: 100%;
+
+overflow: scroll;
+
+  span {
+    display: block;
+  }
+
+  &__name {
+    overflow: hidden;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 
   &:hover {
     cursor: pointer;
