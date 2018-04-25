@@ -2,7 +2,7 @@
   <div class="courses">
     <!--  HOUR GRID LINES -->
     <div v-for="n in 14" class="courses__hours">
-      {{ day == 0 ? (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') : '' }}
+      <!-- {{ day == 0 ? (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') : '' }} -->
     </div>
     <!--  COURSES BY DAY OF WEEK -->
     <app-course
@@ -115,20 +115,18 @@ export default {
     "seven"
     "eightpm"
     "ninepm";
+
   position: relative;
   margin-top: 2rem;
 
   &__hours {
-    font-size: var(--font-xs);
-    color: var(--color-grey-dark-2);
+    // color: var(--color-grey-dark-2);
+    // font-size: var(--font-xs);
+    border-bottom: 1px solid var(--color-grey-light-1);
     z-index: -1;
 
     &:first-of-type {
       border-top: 1px solid var(--color-grey-light-1);
-    }
-
-    &:not(:last-of-type) {
-      border-bottom: 1px solid var(--color-grey-light-1);
     }
   }
 }

@@ -2,6 +2,11 @@
   <div class="week">
     <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
+      <div class="test-hours">
+        <div v-for="n in 14">
+          {{ (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') }}
+        </div>
+      </div>
       <div
         v-for="(day, index) in days"
         class="week__day"
@@ -41,8 +46,6 @@ export default {
   methods: {
     hideWeekend(dayIndex) {
       if (dayIndex == 0 || dayIndex == 6) {
-        console.log('THIS IS A WEEKEND')
-
         let n = dayIndex + 1
         let day = `day${n}_start`
 
@@ -70,7 +73,6 @@ export default {
   height: 90vh;
   padding: 3rem;
 
-  &__header,
   &__total-hours {
     text-align: center;
   }
@@ -88,5 +90,17 @@ export default {
       font-size: var(--font-s);
     }
   }
+}
+
+.test-hours {
+  position: relative;
+  margin-top: 3rem;
+
+  color: var(--color-grey-dark-2);
+  font-size: var(--font-xs);
+
+  display: grid;
+  grid-template-columns: 3rem;
+  grid-auto-rows: 5rem;
 }
 </style>

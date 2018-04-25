@@ -100,9 +100,11 @@ export default {
 .course-block {
   color: var(--color-grey-dark-1);
   font-size: var(--font-xs);
-  overflow: scroll;
   padding: .4rem;
   position: absolute;
+  overflow: scroll;
+  width: 100%;
+  z-index: 2;
   width: 100%;
   z-index: 2;
 
@@ -111,11 +113,11 @@ export default {
   }
 
   &__remove {
+    color: var(--color-grey-dark-1);
     display: none;
     position: absolute;
     top: .3rem;
     right: .5rem;
-    color: var(--color-grey-dark-1);
     z-index: 9999;
   }
 
