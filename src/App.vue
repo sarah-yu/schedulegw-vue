@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <app-filters></app-filters>
+    <app-filter></app-filter>
     <main class="main">
       <app-course-list></app-course-list>
       <app-week></app-week>
@@ -12,7 +12,7 @@
 
 <script>
 import Header from './components/Header.vue'
-import Filters from './components/Filters/Filters.vue'
+import Filter from './components/Filter/Filter.vue'
 import CourseList from './components/CourseList/CourseList.vue'
 import Week from './components/Week/Week.vue'
 import Footer from './components/Footer.vue'
@@ -20,7 +20,7 @@ import Footer from './components/Footer.vue'
 export default {
   components: {
     appHeader: Header,
-    appFilters: Filters,
+    appFilter: Filter,
     appCourseList: CourseList,
     appWeek: Week,
     appFooter: Footer
