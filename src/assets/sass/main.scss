@@ -1,0 +1,51 @@
+:root {
+  // BLUES
+  --color-primary: #003b5b;
+  --color-primary-light: #0098dd;
+
+  // GOLDS
+  --color-secondary: #ab9964;
+  --color-secondary-light: #cfc092;
+
+  // GREYS, LIGHT & DARK
+  --color-grey-light-1: #f3f3f3;
+  --color-grey-light-2: #f0eeee;
+  --color-grey-light-3: #ccc;
+
+  --color-grey-dark-1: #333;
+  --color-grey-dark-2: #777;
+  --color-grey-dark-3: #999;
+
+  // FONTS & SIZES
+  --font-primary: 'Lato', sans-serif;
+
+  --font-xs: 1rem;
+  --font-s: 1.2rem;
+  --font-m: 1.4rem;
+  --font-l: 1.6rem;
+  --font-xl: 2.4rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit; // inherit border-box from html
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; // 10px / 16px = 62.5% --> 1rem = 10px
+}
+
+body {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-grey-dark-1);
+  min-height: 100vh;
+}

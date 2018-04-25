@@ -5,7 +5,11 @@
       {{ day == 0 ? (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') : '' }}
     </div>
     <!--  COURSES BY DAY OF WEEK -->
-    <app-course v-for="course in dayn_courses(day + 1)" :course="course" :day="day" :key="course.id"></app-course>
+    <app-course
+      v-for="course in dayn_courses(day + 1)"
+      :course="course"
+      :day="day"
+      :key="course.id"></app-course>
   </div>
 </template>
 
@@ -35,6 +39,9 @@ export default {
       return courses
     },
     checkConflicts(courses, n) {
+      let conflict1 = null
+      let conflict2 = null
+
       for (let i = 0; i < courses.length; i++) {
         for (let j = 0; j < courses.length; j++) {
           let start1 = courses[i][`day${n}_start`]
@@ -51,13 +58,34 @@ export default {
               ((start2 < start1 && end2 > start1) ||
                 (start2 < end1 && end2 > end1))
             ) {
-              this.addConflict({
-                course1: courses[i],
-                course2: courses[j]
-              })
+              console.log('CONFLICT!')
+              console.log(
+                `1: ${
+                  courses[i].course_name
+                } on day ${n} from ${start1} to ${end1}`
+              )
+              console.log(
+                `2: ${
+                  courses[j].course_name
+                } on day ${n} from ${start2} to ${end2}`
+              )
+
+              conflict1 = courses[i]
+              conflict2 = courses[j]
+
+              // this.addConflict({
+              //   course1: courses[i],
+              //   course2: courses[j]
+              // })
             }
           }
         }
+      }
+      if (conflict1 && conflict2) {
+        this.addConflict({
+          course1: conflict1,
+          course2: conflict2
+        })
       }
     }
   },
@@ -70,8 +98,8 @@ export default {
 <style lang="scss">
 .courses {
   display: grid;
-  grid-template-columns: 100%;
-  grid-auto-rows: 60px;
+  grid-template-columns: 98%;
+  grid-auto-rows: 5rem;
   grid-template-areas:
     "eight"
     "nine"
@@ -88,17 +116,19 @@ export default {
     "eightpm"
     "ninepm";
   position: relative;
+  margin-top: 2rem;
 
   &__hours {
-    font-size: .8rem;
-    text-transform: uppercase;
+    font-size: var(--font-xs);
+    color: var(--color-grey-dark-2);
+    z-index: -1;
 
     &:first-of-type {
-      border-top: 1px dashed black;
+      border-top: 1px solid var(--color-grey-light-1);
     }
 
     &:not(:last-of-type) {
-      border-bottom: 1px dashed black;
+      border-bottom: 1px solid var(--color-grey-light-1);
     }
   }
 }

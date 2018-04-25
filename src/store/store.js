@@ -20,7 +20,8 @@ export default new Vuex.Store({
     },
     ADD_COURSE: (state, newCourse) => {
       newCourse.conflicts = false // default conflicts to false
-      state.newSchedule.push(newCourse)
+      state.newSchedule = state.newSchedule.concat(newCourse)
+      // state.newSchedule.push(newCourse)
     },
     FILTER_COURSES: (state, filter) => {
       let filteredCourses = state.courses.filter(course => {
@@ -38,10 +39,10 @@ export default new Vuex.Store({
     },
     REMOVE_COURSE: (state, course) => {
       course.conflicts = false // reset conflicts to false
-      state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
-
-      console.log('JUST REMOVED COURSE:')
-      console.log(course)
+      state.newSchedule = state.newSchedule.filter(
+        eachCourse => eachCourse != course
+      )
+      // state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
     },
     ASSIGN_COLOR: (state, { course, color }) => {
       let theCourse = state.newSchedule.find(c => c == course)
@@ -59,14 +60,20 @@ export default new Vuex.Store({
     removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
     assignColor: ({ commit }, course) => {
       const colors = [
-        '#F7AA97',
-        '#ED9282',
-        '#DE7E73',
-        '#CFAA9E',
-        '#77AAAD',
-        '#6E7783',
-        '#D8E6E7',
-        '#9DC3C1'
+        // '#F7AA97',
+        // '#ED9282',
+        // '#DE7E73',
+        // '#CFAA9E',
+        // '#6E7783',
+        // '#D8E6E7',
+        // '#9DC3C1'
+        '#AB9964',
+        '#CFC092',
+        '#F7EAC5',
+        '#C6B685',
+        '#E8DAB2',
+        '#BFAD7A',
+        '#9C8952'
       ]
 
       let randomColor = Math.floor(Math.random() * colors.length)
