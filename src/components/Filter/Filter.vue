@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="filters">
     <label for="filter">Filter</label>
       <input
         type="text"
@@ -32,5 +32,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.filters {
+  min-height: 15vh;
+  border-bottom: 1px solid var(--color-grey-light-2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
