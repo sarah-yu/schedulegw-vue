@@ -1,11 +1,19 @@
 <template lang="html">
   <div
-    @click="removeCourse(course)"
+    @click="removeCourse"
+    @mouseenter="mouseenter"
+    @mouseleave="mouseleave"
     :style="placeCourse(course, course[`day${day+1}_start`], course[`day${day+1}_end`])"
     class="course-block">
-    <span class="course-block__id">{{ course.id }}</span>
-    <span class="course-block__name">{{ course.course_name }}</span>
-    <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+    <div v-if="!showFinalInfo">
+      <span class="course-block__id">{{ course.gwid }}-{{ course.section }}</span>
+      <span class="course-block__name">{{ course.course_name }}</span>
+      <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+    </div>
+    <div v-else>
+      <span class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
+    </div>
+    <!-- <div class="course-block__remove"><i class="far fa-times-circle fa-lg"></i></div> -->
   </div>
 </template>
 
@@ -14,12 +22,30 @@ import { mapActions } from 'vuex'
 
 export default {
   props: ['course', 'day'],
+  data() {
+    return {
+      showFinalInfo: false
+    }
+  },
   methods: {
     ...mapActions({
       removeFromSchedule: 'removeCourse'
     }),
-    removeCourse(course) {
-      this.removeFromSchedule(course)
+    removeCourse() {
+      this.removeFromSchedule(this.course)
+    },
+    mouseenter() {
+      this.showFinalInfo = true
+    },
+    mouseleave() {
+      this.showFinalInfo = false
+    },
+    finalInfo(info) {
+      if (info) {
+        return info
+      } else {
+        return 'TBA'
+      }
     },
     placeCourse(course, start, end) {
       // place course on schedule according to start and end time
@@ -70,17 +96,12 @@ export default {
 
 <style lang="scss" scoped>
 .course-block {
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-
-  font-size: var(--font-s);
+  font-size: var(--font-xs);
+  overflow: scroll;
   padding: .4rem;
   position: absolute;
-  z-index: 2;
+  // z-index: 2;
   width: 100%;
-
-overflow: scroll;
 
   span {
     display: block;
@@ -88,13 +109,31 @@ overflow: scroll;
 
   &__name {
     overflow: hidden;
-    width: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  &__remove {
+    position: absolute;
+    top: .2rem;
+    right: .2rem;
+    // width: 2rem;
+    // height: 2rem;
+    // border-radius: 50%;
+    // background-color: #fff;
+    // border: 1px solid var(--color-grey-dark-3);
+    color: var(--color-grey-dark-1);
+    z-index: 9999;
+    // display: none;
   }
 
   &:hover {
     cursor: pointer;
   }
+
+  // &:hover > &__remove {
+  //   display: block;
+  // }
 }
 </style>
