@@ -47,7 +47,6 @@ export default new Vuex.Store({
         '#ED9282',
         '#DE7E73',
         '#CFAA9E',
-        '#77AAAD',
         '#6E7783',
         '#D8E6E7',
         '#9DC3C1'
