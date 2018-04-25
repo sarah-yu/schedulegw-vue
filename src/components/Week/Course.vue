@@ -70,13 +70,12 @@ export default {
 
 <style lang="scss" scoped>
 .course-block {
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-
-  font-size: var(--font-s);
+  color: var(--color-grey-dark-1);
+  font-size: var(--font-xs);
   padding: .4rem;
   position: absolute;
+  overflow: scroll;
+  width: 100%;
   z-index: 2;
   width: 100%;
 
@@ -86,11 +85,13 @@ overflow: scroll;
     display: block;
   }
 
-  &__name {
-    overflow: hidden;
-    width: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  &__remove {
+    color: var(--color-grey-dark-1);
+    display: none;
+    position: absolute;
+    top: .3rem;
+    right: .5rem;
+    z-index: 9999;
   }
 
   &:hover {

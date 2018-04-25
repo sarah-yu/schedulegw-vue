@@ -2,7 +2,16 @@
   <div class="week">
     <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
-      <div v-for="(day, index) in days" class="week__day">
+      <div class="test-hours">
+        <div v-for="n in 14">
+          {{ (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') }}
+        </div>
+      </div>
+      <div
+        v-for="(day, index) in days"
+        class="week__day"
+        v-if="!hideWeekend(index)"
+        :style="width">
         <h3>{{ day }}</h3>
         <app-courses :day="index"></app-courses>
       </div>
@@ -26,6 +35,29 @@ export default {
       return this.newSchedule.reduce((acc, curr) => {
         return acc + parseInt(curr.hours)
       }, 0)
+    },
+    width() {
+      return {
+        width: 100 / this.daysCount + '%'
+      }
+    }
+  },
+  methods: {
+    hideWeekend(dayIndex) {
+      if (dayIndex == 0 || dayIndex == 6) {
+        let n = dayIndex + 1
+        let day = `day${n}_start`
+
+        let courses = this.newSchedule.filter(course => course[day] != null)
+
+        if (courses.length < 1) {
+          this.daysCount = 5
+          return true
+        } else {
+          this.daysCount = 7
+          return false
+        }
+      }
     }
   },
   components: {
@@ -40,7 +72,6 @@ export default {
   height: 90vh;
   padding: 3rem;
 
-  &__header,
   &__total-hours {
     text-align: center;
   }
@@ -60,5 +91,17 @@ export default {
       font-size: var(--font-s);
     }
   }
+}
+
+.test-hours {
+  position: relative;
+  margin-top: 3rem;
+
+  color: var(--color-grey-dark-2);
+  font-size: var(--font-xs);
+
+  display: grid;
+  grid-template-columns: 3rem;
+  grid-auto-rows: 5rem;
 }
 </style>
