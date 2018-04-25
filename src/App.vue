@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <app-header></app-header>
-    <app-filters></app-filters>
-    <main class="main">
+    <app-filter></app-filter>
+    <div class="main">
       <app-course-list></app-course-list>
       <app-week></app-week>
-    </main>
-    <app-footer></app-footer>
+    </div>
   </div>
 </template>
 

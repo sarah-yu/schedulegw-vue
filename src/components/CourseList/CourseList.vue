@@ -14,10 +14,16 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      getCourses: 'courses'
+      getCourses: 'courses',
+      fCourses: 'fCourses',
+      filter: 'filter'
     }),
     courses() {
-      return this.getCourses
+      if (this.filter) {
+        return this.fCourses
+      } else {
+        return this.getCourses
+      }
     }
   },
   created() {

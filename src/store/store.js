@@ -7,7 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     courses: [],
-    newSchedule: []
+    newSchedule: [],
+    filteredCourses: [],
+    filter: ''
   },
   mutations: {
     LOAD_COURSES: state => {
@@ -20,6 +22,20 @@ export default new Vuex.Store({
       newCourse.conflicts = false // default conflicts to false
       state.newSchedule = state.newSchedule.concat(newCourse)
       // state.newSchedule.push(newCourse)
+    },
+    FILTER_COURSES: (state, filter) => {
+      let filteredCourses = state.courses.filter(course => {
+        let coursename = course.course_name.toLowerCase()
+        state.filter = filter
+        console.log(state.filter)
+        return (
+          coursename.indexOf(state.filter) != -1 ||
+          course.gwid.indexOf(state.filter) != -1 ||
+          course.professor_name.indexOf(state.filter) != -1
+        )
+      })
+      state.filteredCourses = filteredCourses
+      console.log(state.filteredCourses)
     },
     REMOVE_COURSE: (state, course) => {
       course.conflicts = false // reset conflicts to false
@@ -38,6 +54,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    filteredcourses: ({ commit }, filter) => commit('FILTER_COURSES', filter),
     loadCourses: ({ commit }) => commit('LOAD_COURSES'),
     addCourse: ({ commit }, newCourse) => commit('ADD_COURSE', newCourse),
     removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
@@ -70,6 +87,8 @@ export default new Vuex.Store({
       commit('ADD_CONFLICT', { course1, course2 })
   },
   getters: {
+    filter: state => state.filter,
+    fCourses: state => state.filteredCourses,
     courses: state => state.courses,
     newSchedule: state => state.newSchedule
   }
