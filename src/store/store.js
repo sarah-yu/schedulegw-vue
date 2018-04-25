@@ -43,13 +43,20 @@ export default new Vuex.Store({
     removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
     assignColor: ({ commit }, course) => {
       const colors = [
-        '#F7AA97',
-        '#ED9282',
-        '#DE7E73',
-        '#CFAA9E',
-        '#6E7783',
-        '#D8E6E7',
-        '#9DC3C1'
+        // '#F7AA97',
+        // '#ED9282',
+        // '#DE7E73',
+        // '#CFAA9E',
+        // '#6E7783',
+        // '#D8E6E7',
+        // '#9DC3C1'
+        '#AB9964',
+        '#CFC092',
+        '#F7EAC5',
+        '#C6B685',
+        '#E8DAB2',
+        '#BFAD7A',
+        '#9C8952'
       ]
 
       let randomColor = Math.floor(Math.random() * colors.length)

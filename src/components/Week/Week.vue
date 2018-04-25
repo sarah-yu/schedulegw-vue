@@ -26,7 +26,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // for generating and labeling columns for days of the week
+      days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // for generating and labeling columns for days of the week
+      daysCount: 7
     }
   },
   computed: {
@@ -82,8 +83,6 @@ export default {
   }
 
   &__day {
-    width: 14%;
-
     h3 {
       display: flex;
       justify-content: center;

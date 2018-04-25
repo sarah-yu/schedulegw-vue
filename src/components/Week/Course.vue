@@ -1,11 +1,18 @@
 <template lang="html">
   <div
-    @click="removeCourse(course)"
+    @click="removeCourse"
+    @mouseenter="mouseenter"
+    @mouseleave="mouseleave"
     :style="placeCourse(course, course[`day${day+1}_start`], course[`day${day+1}_end`])"
-    class="course-block">
-    <span class="course-block__id">{{ course.id }}</span>
-    <span class="course-block__name">{{ course.course_name }}</span>
-    <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+    class="course-block"
+    :class="`course-block--day${day}`">
+      <span class="course-block__id">{{ course.gwid }}-{{ course.section }} <i v-if="course.closed" class="fas fa-lock"></i></span>
+      <span class="course-block__name">{{ course.course_name }}</span>
+      <div v-if="showFinalInfo" >
+        <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+        <span class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
+      </div>
+    <div class="course-block__remove"><i class="fas fa-times"></i></div>
   </div>
 </template>
 
@@ -14,12 +21,30 @@ import { mapActions } from 'vuex'
 
 export default {
   props: ['course', 'day'],
+  data() {
+    return {
+      showFinalInfo: false
+    }
+  },
   methods: {
     ...mapActions({
       removeFromSchedule: 'removeCourse'
     }),
-    removeCourse(course) {
-      this.removeFromSchedule(course)
+    removeCourse() {
+      this.removeFromSchedule(this.course)
+    },
+    mouseenter() {
+      this.showFinalInfo = true
+    },
+    mouseleave() {
+      this.showFinalInfo = false
+    },
+    finalInfo(info) {
+      if (info) {
+        return info
+      } else {
+        return 'TBA'
+      }
     },
     placeCourse(course, start, end) {
       // place course on schedule according to start and end time
@@ -34,7 +59,10 @@ export default {
       let height = this.getDuration(start, end) + 'px'
 
       return {
-        backgroundColor: course.conflicts ? 'red' : course.color,
+        background: course.conflicts
+          ? 'repeating-linear-gradient(135deg, #777, #777 .15rem, #ab9964 0, #ab9964 .85rem)'
+          : course.color,
+        border: course.conflicts ? '1px solid #003b5b' : '',
         'grid-area': hour, // place course in correct row based on starting hour
         top: top, // add additional px to top based on starting minutes
         height: height // height of course div based on end time
@@ -78,8 +106,7 @@ export default {
   width: 100%;
   z-index: 2;
   width: 100%;
-
-overflow: scroll;
+  z-index: 2;
 
   span {
     display: block;
@@ -96,6 +123,12 @@ overflow: scroll;
 
   &:hover {
     cursor: pointer;
+    transform: scale(1.5);
+    z-index: 1000;
+  }
+
+  &:hover > &__remove {
+    display: block;
   }
 }
 </style>

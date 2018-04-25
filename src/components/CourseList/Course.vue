@@ -1,5 +1,7 @@
 <template lang="html">
-  <div class="course" @click="selectCourse" :class="{'course--selected': selected, 'course--greyed-out': tba || closed}">
+  <div class="course"
+    @click="selectCourse"
+    :class="{'course--selected': selected, 'course--greyed-out': tba || closed}">
     <div class="course__closed">
       <span v-if="closed"><i class="fas fa-lock"></i></span>
     </div>
