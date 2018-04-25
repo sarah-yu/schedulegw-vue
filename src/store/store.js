@@ -18,14 +18,15 @@ export default new Vuex.Store({
     },
     ADD_COURSE: (state, newCourse) => {
       newCourse.conflicts = false // default conflicts to false
-      state.newSchedule.push(newCourse)
+      state.newSchedule = state.newSchedule.concat(newCourse)
+      // state.newSchedule.push(newCourse)
     },
     REMOVE_COURSE: (state, course) => {
       course.conflicts = false // reset conflicts to false
-      state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
-
-      console.log('JUST REMOVED COURSE:')
-      console.log(course)
+      state.newSchedule = state.newSchedule.filter(
+        eachCourse => eachCourse != course
+      )
+      // state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
     },
     ASSIGN_COLOR: (state, { course, color }) => {
       let theCourse = state.newSchedule.find(c => c == course)
