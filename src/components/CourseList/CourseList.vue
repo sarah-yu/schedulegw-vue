@@ -6,15 +6,15 @@
 </template>
 
 <script>
-import Course from "./Course.vue"
-import { mapGetters } from "vuex"
+import Course from './Course.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
     ...mapGetters({
-      getCourses: "courses",
-      fCourses: "fCourses",
-      filter: "filter"
+      getCourses: 'courses',
+      fCourses: 'fCourses',
+      filter: 'filter'
     }),
     courses() {
       if (this.filter) {
@@ -25,7 +25,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("loadCourses")
+    this.$store.dispatch('loadCourses')
   },
   components: {
     appCourse: Course

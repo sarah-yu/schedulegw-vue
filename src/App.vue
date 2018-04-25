@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import Filter from "./components/Filter/Filter.vue"
-import CourseList from "./components/CourseList/CourseList.vue"
-import Week from "./components/Week/Week.vue"
+import Filter from './components/Filter/Filter.vue'
+import CourseList from './components/CourseList/CourseList.vue'
+import Week from './components/Week/Week.vue'
 
 export default {
   components: {

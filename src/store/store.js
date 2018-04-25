@@ -1,6 +1,6 @@
-import Vue from "vue"
-import Vuex from "vuex"
-import axios from "axios"
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -9,12 +9,12 @@ export default new Vuex.Store({
     courses: [],
     newSchedule: [],
     filteredCourses: [],
-    filter: ""
+    filter: ''
   },
   mutations: {
     LOAD_COURSES: state => {
       axios
-        .get("/courses")
+        .get('/courses')
         .then(res => (state.courses = res.data))
         .catch(err => console.log(err))
     },
@@ -40,7 +40,7 @@ export default new Vuex.Store({
       course.conflicts = false // reset conflicts to false
       state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
 
-      console.log("JUST REMOVED COURSE:")
+      console.log('JUST REMOVED COURSE:')
       console.log(course)
     },
     ASSIGN_COLOR: (state, { course, color }) => {
@@ -53,31 +53,31 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    filteredcourses: ({ commit }, filter) => commit("FILTER_COURSES", filter),
-    loadCourses: ({ commit }) => commit("LOAD_COURSES"),
-    addCourse: ({ commit }, newCourse) => commit("ADD_COURSE", newCourse),
-    removeCourse: ({ commit }, course) => commit("REMOVE_COURSE", course),
+    filteredcourses: ({ commit }, filter) => commit('FILTER_COURSES', filter),
+    loadCourses: ({ commit }) => commit('LOAD_COURSES'),
+    addCourse: ({ commit }, newCourse) => commit('ADD_COURSE', newCourse),
+    removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
     assignColor: ({ commit }, course) => {
       const colors = [
-        "#F7AA97",
-        "#ED9282",
-        "#DE7E73",
-        "#CFAA9E",
-        "#77AAAD",
-        "#6E7783",
-        "#D8E6E7",
-        "#9DC3C1"
+        '#F7AA97',
+        '#ED9282',
+        '#DE7E73',
+        '#CFAA9E',
+        '#77AAAD',
+        '#6E7783',
+        '#D8E6E7',
+        '#9DC3C1'
       ]
 
       let randomColor = Math.floor(Math.random() * colors.length)
 
-      commit("ASSIGN_COLOR", {
+      commit('ASSIGN_COLOR', {
         course: course,
         color: colors[randomColor]
       })
     },
     addConflict: ({ commit }, { course1, course2 }) =>
-      commit("ADD_CONFLICT", { course1, course2 })
+      commit('ADD_CONFLICT', { course1, course2 })
   },
   getters: {
     filter: state => state.filter,

@@ -12,18 +12,18 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
       userData: {
-        filter: ""
+        filter: ''
       }
     }
   },
   methods: {
-    ...mapActions(["filteredcourses"]),
+    ...mapActions(['filteredcourses']),
     search() {
       let filter = this.userData.filter.toString().toLowerCase()
       this.filteredcourses(filter)
