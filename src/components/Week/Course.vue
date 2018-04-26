@@ -6,12 +6,17 @@
     :style="placeCourse(course, course[`day${day+1}_start`], course[`day${day+1}_end`])"
     class="course-block"
     :class="`course-block--day${day}`">
-      <span class="course-block__id">{{ course.gwid }}-{{ course.section }} <i v-if="course.closed" class="fas fa-lock"></i></span>
-      <span class="course-block__name">{{ course.course_name }}</span>
-      <div v-if="showFinalInfo" >
-        <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
-        <span class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
-      </div>
+      <span
+        class="course-block__name">{{ course.course_name }}</span>
+        <span
+          v-if="!showFinalInfo"
+          class="course-block__id">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+      <!-- <div v-if="showFinalInfo" > -->
+        <!-- <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span> -->
+        <span
+          v-else
+          class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
+      <!-- </div> -->
     <div class="course-block__remove"><i class="fas fa-times"></i></div>
   </div>
 </template>
@@ -89,7 +94,7 @@ export default {
       return hours[time]
     },
     getDuration(start, end) {
-      if (end - start < 100) {
+      if (end - start < 60) {
         return (end - start) * (100 / 60) * 0.01 * 50
       } else {
         return (end - start) * 0.01 * 50
