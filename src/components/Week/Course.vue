@@ -10,7 +10,7 @@
         class="course-block__name">{{ course.course_name }}</span>
         <span
           v-if="!showFinalInfo"
-          class="course-block__id">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+          class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
       <!-- <div v-if="showFinalInfo" > -->
         <!-- <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span> -->
         <span
@@ -107,7 +107,7 @@ export default {
 <style lang="scss" scoped>
 .course-block {
   color: var(--color-grey-dark-1);
-  font-size: var(--font-xs);
+  font-size: var(--font-s);
   padding: .4rem;
   position: absolute;
   overflow: scroll;
@@ -137,6 +137,11 @@ export default {
 
   &:hover > &__remove {
     display: block;
+  }
+
+  &__time,
+  &__final-info {
+    font-size: var(--font-xs);
   }
 }
 </style>
