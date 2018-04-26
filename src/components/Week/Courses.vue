@@ -1,9 +1,7 @@
 <template lang="html">
   <div class="courses">
     <!--  HOUR GRID LINES -->
-    <div v-for="n in 14" class="courses__hours">
-      <!-- {{ day == 0 ? (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') : '' }} -->
-    </div>
+    <div v-for="n in 14" class="courses__hours"></div>
     <!--  COURSES BY DAY OF WEEK -->
     <app-course
       v-for="course in dayn_courses(day + 1)"

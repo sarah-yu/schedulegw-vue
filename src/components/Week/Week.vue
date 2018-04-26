@@ -2,7 +2,7 @@
   <div class="week">
     <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
-      <div class="test-hours">
+      <div class="week__hours">
         <div v-for="n in 14">
           {{ (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') }}
         </div>
@@ -90,17 +90,19 @@ export default {
       font-size: var(--font-s);
     }
   }
+
+  &__hours {
+    display: grid;
+    grid-template-columns: 3rem;
+    grid-auto-rows: 5rem;
+
+    color: var(--color-grey-dark-2);
+    font-size: var(--font-xs);
+    margin-top: 3rem;
+    margin-right: 1rem;
+    position: relative;
+  }
 }
 
-.test-hours {
-  position: relative;
-  margin-top: 3rem;
 
-  color: var(--color-grey-dark-2);
-  font-size: var(--font-xs);
-
-  display: grid;
-  grid-template-columns: 3rem;
-  grid-auto-rows: 5rem;
-}
 </style>

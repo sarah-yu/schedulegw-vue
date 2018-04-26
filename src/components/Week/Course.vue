@@ -55,7 +55,7 @@ export default {
         hour = this.getHour(start.slice(0, 2))
       }
 
-      let top = start.slice(-2) * (5 / 6) + 'px'
+      let top = start.slice(-2) * (100 / 60) * 0.01 * 50 + 'px'
       let height = this.getDuration(start, end) + 'px'
 
       return {
@@ -89,8 +89,11 @@ export default {
       return hours[time]
     },
     getDuration(start, end) {
-      // return (end - start) * 0.01 * 60 // if each hour is 60px
-      return (end - start) * 0.01 * 50
+      if (end - start < 100) {
+        return (end - start) * (100 / 60) * 0.01 * 50
+      } else {
+        return (end - start) * 0.01 * 50
+      }
     }
   }
 }
