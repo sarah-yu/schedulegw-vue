@@ -18,12 +18,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   props: ['day'],
   computed: {
-    ...mapGetters(['newSchedule'])
+    ...mapGetters(['newSchedule', 'coursesByDay'])
   },
   methods: {
-    ...mapActions({
-      addConflict: 'addConflict'
-    }),
+    ...mapActions(['checkConflicts', 'addConflict']),
     dayn_courses(n) {
       // place course in correct day(s) of week
       let dayn_start = `day${n}_start`
@@ -56,30 +54,16 @@ export default {
               ((start2 < start1 && end2 > start1) ||
                 (start2 < end1 && end2 > end1))
             ) {
-              console.log('CONFLICT!')
-              console.log(
-                `1: ${
-                  courses[i].course_name
-                } on day ${n} from ${start1} to ${end1}`
-              )
-              console.log(
-                `2: ${
-                  courses[j].course_name
-                } on day ${n} from ${start2} to ${end2}`
-              )
-
               conflict1 = courses[i]
               conflict2 = courses[j]
-
-              // this.addConflict({
-              //   course1: courses[i],
-              //   course2: courses[j]
-              // })
             }
           }
         }
       }
       if (conflict1 && conflict2) {
+        conflict1 = this.newSchedule.find(course => course == conflict1)
+        conflict2 = this.newSchedule.find(course => course == conflict2)
+
         this.addConflict({
           course1: conflict1,
           course2: conflict2
