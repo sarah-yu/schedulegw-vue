@@ -2,7 +2,15 @@
   <div class="course-list">
     <h2 class="course-list__header">Course List</h2>
     <div class="course-list__container">
-      <app-course v-for="course in courses" :course="course" :key="course.id"></app-course>
+      <app-course
+        v-for="course in courses"
+        :course="course"
+        :key="course.id"></app-course>
+        <div
+          class="course-list__no-courses-found"
+          v-if="noCoursesFound">
+          <p>No courses match your search criteria.</p>
+        </div>
     </div>
   </div>
 </template>
@@ -23,6 +31,11 @@ export default {
         return this.fCourses
       } else {
         return this.getCourses
+      }
+    },
+    noCoursesFound() {
+      if (this.filter && this.fCourses.length == 0) {
+        return true
       }
     }
   },
@@ -54,6 +67,13 @@ export default {
     @media only screen and (max-width: 800px) {
       height: 20vh;
     }
+  }
+
+  &__no-courses-found {
+    color: var(--color-grey-dark-2);
+    font-size: var(--font-m);
+    text-align: center;
+    margin-top: 2rem;
   }
 }
 </style>
