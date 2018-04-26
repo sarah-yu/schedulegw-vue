@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="week">
-    <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
       <div class="week__hours">
         <div v-for="n in 14">
@@ -73,10 +72,6 @@ export default {
   height: 90vh;
   padding: 3rem;
 
-  &__total-hours {
-    text-align: center;
-  }
-
   &__days {
     display: flex;
     justify-content: space-around;
@@ -88,6 +83,7 @@ export default {
       justify-content: center;
       color: var(--color-grey-dark-2);
       font-size: var(--font-s);
+      font-weight: 400;
     }
   }
 
