@@ -15,11 +15,13 @@
         <app-courses :day="index"></app-courses>
       </div>
     </div>
+    <app-tba-courses></app-tba-courses>
   </div>
 </template>
 
 <script>
 import Courses from './Courses.vue'
+import TbaCourses from './TbaCourses.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -61,7 +63,8 @@ export default {
     }
   },
   components: {
-    appCourses: Courses
+    appCourses: Courses,
+    appTbaCourses: TbaCourses
   }
 }
 </script>
@@ -70,11 +73,13 @@ export default {
 .week {
   flex: 2;
   height: 90vh;
-  padding: 3rem;
+  // padding: 3rem;
 
   &__days {
     display: flex;
     justify-content: space-around;
+    padding: 3rem;
+
   }
 
   &__day {
@@ -99,6 +104,4 @@ export default {
     position: relative;
   }
 }
-
-
 </style>
