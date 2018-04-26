@@ -72,8 +72,7 @@ export default {
 <style lang="scss" scoped>
 .week {
   flex: 2;
-  height: 90vh;
-  // padding: 3rem;
+  min-height: 90vh;
 
   &__days {
     display: flex;
