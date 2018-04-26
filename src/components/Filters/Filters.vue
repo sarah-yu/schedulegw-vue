@@ -1,13 +1,6 @@
 <template>
   <div class="filters">
-    <label for="filter">Filter</label>
-      <input
-        type="text"
-        id="filter"
-        class="form-control"
-        v-model="userData.filter"
-        @input="search">
-        <p>{{ userData.filter }}</p>
+    <input v-model="keyword" type="text">
   </div>
 </template>
 
@@ -22,11 +15,16 @@ export default {
       }
     }
   },
-  methods: {
-    ...mapActions(['filteredcourses']),
-    search() {
-      let filter = this.userData.filter.toString().toLowerCase()
-      this.filteredcourses(filter)
+  computed: {
+    ...mapGetters(['filter']),
+    keyword: {
+      get() {
+        return this.filter
+      },
+      set(value) {
+        let keyword = value.toString().toLowerCase()
+        this.$store.dispatch('filterCourses', keyword)
+      }
     }
   }
 }

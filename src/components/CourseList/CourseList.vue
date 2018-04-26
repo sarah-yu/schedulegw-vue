@@ -23,18 +23,18 @@ export default {
   computed: {
     ...mapGetters({
       getCourses: 'courses',
-      fCourses: 'fCourses',
+      filteredCourses: 'filteredCourses',
       filter: 'filter'
     }),
     courses() {
       if (this.filter) {
-        return this.fCourses
+        return this.filteredCourses
       } else {
         return this.getCourses
       }
     },
     noCoursesFound() {
-      if (this.filter && this.fCourses.length == 0) {
+      if (this.filter && this.filteredCourses.length == 0) {
         return true
       }
     }
@@ -57,6 +57,8 @@ export default {
     color: var(--color-primary);
     font-size: var(--font-s);
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .08rem;
     padding: 2rem 0 1rem 0;
   }
 
