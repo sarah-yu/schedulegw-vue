@@ -9,7 +9,7 @@
         <option>Fall 2017</option>
       </select> -->
       <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
-      <p v-if="totalHours" class="total-hours">{{ totalHours }} Hours</p>
+      <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
       <button class="button-primary">Save Schedule</button>
     </div>
 
@@ -76,6 +76,17 @@ export default {
         .reduce((acc, curr) => {
           return acc + parseInt(curr.hours)
         }, 0)
+    },
+    variableHours() {
+      let plus = ''
+      let varHours = this.newSchedule.filter(
+        course => course.hours == 'variable'
+      )
+      if (varHours.length > 0) {
+        plus = '+'
+      }
+
+      return plus
     }
   },
   methods: {

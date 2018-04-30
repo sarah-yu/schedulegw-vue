@@ -22,7 +22,7 @@
 <script>
 import Courses from './Courses.vue'
 import TbaCourses from './TbaCourses.vue'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {

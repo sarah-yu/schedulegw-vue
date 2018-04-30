@@ -9,7 +9,8 @@ export default new Vuex.Store({
     courses: [],
     newSchedule: [],
     filteredCourses: [],
-    filter: ''
+    filter: '',
+    daysFilter: []
   },
   mutations: {
     LOAD_COURSES: state => {
@@ -20,23 +21,56 @@ export default new Vuex.Store({
     },
     ADD_COURSE: (state, newCourse) => {
       newCourse.conflicts = false // default conflicts to false
-      state.newSchedule = state.newSchedule.concat(newCourse)
+      let updatedCourses = state.newSchedule.concat(newCourse)
+      state.newSchedule = updatedCourses
       // state.newSchedule.push(newCourse)
+
+      // console.log('***********************')
+      // console.log('ADD_COURSE: CURRENT STATE OF COURSE CONFLICTS:')
+      // let coursesOnSchedule = state.newSchedule.map(course => {
+      //   return {
+      //     [course.course_name]: course.conflicts
+      //   }
+      // })
+      // console.log(coursesOnSchedule)
+      // console.log('***********************')
     },
     REMOVE_COURSE: (state, course) => {
       course.conflicts = false // reset conflicts to false
-      state.newSchedule = state.newSchedule.filter(
-        eachCourse => eachCourse != course
+
+      state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
+
+      let updatedSchedule = state.newSchedule.map(eachCourse =>
+        Object.assign({}, eachCourse, { conflicts: false })
       )
-      // state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
+
+      state.newSchedule = updatedSchedule
+
+      console.log('***********************')
+      console.log('REMOVE_COURSE: CURRENT STATE OF COURSE CONFLICTS:')
+      let coursesOnSchedule = state.newSchedule.map(course => {
+        return {
+          [course.course_name]: course.conflicts
+        }
+      })
+      console.log(coursesOnSchedule)
+      console.log('***********************')
     },
     ASSIGN_COLOR: (state, { course, color }) => {
       let theCourse = state.newSchedule.find(c => c == course)
       theCourse.color = color
     },
-    ADD_CONFLICT: (state, { course1, course2 }) => {
-      course1.conflicts = true
-      course2.conflicts = true
+    ADD_CONFLICT: (state, coursesWithConflicts) => {
+      // loop through course id's in coursesWithConflicts array
+      for (let i = 0; i < coursesWithConflicts.length; i++) {
+        // match each id to the correct course in state.newSchedule array
+        let course = state.newSchedule.find(
+          course => course.id == coursesWithConflicts[i]
+        )
+
+        // console.log(`set conflict to true for ${course.course_name}`)
+        course.conflicts = true // set conflicts to true for the matching course
+      }
     },
     FILTER_COURSES: (state, filter) => {
       state.filter = filter
@@ -54,8 +88,15 @@ export default new Vuex.Store({
   },
   actions: {
     loadCourses: ({ commit }) => commit('LOAD_COURSES'),
-    addCourse: ({ commit }, newCourse) => commit('ADD_COURSE', newCourse),
-    removeCourse: ({ commit }, course) => commit('REMOVE_COURSE', course),
+    addCourse: ({ commit, dispatch }, newCourse) => {
+      commit('ADD_COURSE', newCourse)
+      dispatch('checkConflicts')
+      dispatch('assignColor', newCourse)
+    },
+    removeCourse: ({ commit, dispatch }, course) => {
+      commit('REMOVE_COURSE', course) // commit REMOVE_COURSE mutation, and...
+      dispatch('checkConflicts') // always check for conflicts in remaining courses
+    },
     assignColor: ({ commit }, course) => {
       const colors = [
         // '#F7AA97',
@@ -81,12 +122,74 @@ export default new Vuex.Store({
         color: colors[randomColor]
       })
     },
-    addConflict: ({ commit }, { course1, course2 }) =>
-      commit('ADD_CONFLICT', { course1, course2 }),
-    filterCourses: ({ commit }, filter) => commit('FILTER_COURSES', filter)
+    checkConflicts: ({ commit, state }) => {
+      let coursesWithConflicts = []
+
+      // loop through each day of the week
+      for (let n = 1; n <= 7; n++) {
+        // filter courses by day of week
+        let courses = state.newSchedule
+          .filter(course => course[`day${n}_start`] != null)
+          .map(course => {
+            return {
+              id: course.id,
+              name: course.course_name,
+              start: course[`day${n}_start`],
+              end: course[`day${n}_end`]
+            }
+          })
+
+        // console.log(`${courses.length} courses in day ${n}:`)
+        // console.log(courses)
+
+        // if there's more than 1 course on any day of the week, check for conflicts
+        if (courses.length > 1) {
+          for (let i = 0; i < courses.length; i++) {
+            let course1 = courses[i]
+
+            // only compare unique course pairing combinations
+            for (let j = i + 1; j < courses.length; j++) {
+              let course2 = courses[j]
+
+              // console.log(`comparing ${course1.name} to ${course2.name}`);
+
+              // compare course1 to course2
+              if (
+                course1.start == course2.start ||
+                course1.end == course2.end ||
+                ((course1.start < course2.start &&
+                  course1.end > course2.start) ||
+                  (course1.start < course2.end && course1.end > course2.end)) ||
+                ((course2.start < course1.start &&
+                  course2.end > course1.start) ||
+                  (course2.start < course1.end && course2.end > course1.end))
+              ) {
+                // at this point, course1 and course2 are in conflict
+                // add course2 (the more recent course added) to coursesWithConflicts array
+                coursesWithConflicts.push(course2)
+              }
+            }
+          }
+        }
+      }
+
+      // create array of unique id's of courses with conflicts
+      coursesWithConflicts = coursesWithConflicts
+        .map(course => course.id)
+        .filter((course, i, self) => self.indexOf(course) === i)
+
+      // console.log('COURSES WITH CONFLICTS:')
+      // console.log(coursesWithConflicts)
+
+      commit('ADD_CONFLICT', coursesWithConflicts)
+    },
+    filterCourses: ({ commit }, filter) => commit('FILTER_COURSES', filter),
+    filterCoursesByDay: ({ commit }, days) =>
+      commit('FILTER_COURSES_BY_DAY', days)
   },
   getters: {
     filter: state => state.filter,
+    daysFilter: state => state.daysFilter,
     filteredCourses: state => state.filteredCourses,
     courses: state => state.courses,
     newSchedule: state => state.newSchedule
