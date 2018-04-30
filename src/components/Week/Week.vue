@@ -15,13 +15,14 @@
         <app-courses :day="index"></app-courses>
       </div>
     </div>
-    <app-tba-courses></app-tba-courses>
+
+    <app-selected-courses></app-selected-courses>
   </div>
 </template>
 
 <script>
 import Courses from './Courses.vue'
-import TbaCourses from './TbaCourses.vue'
+import SelectedCourses from './SelectedCourses.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -64,7 +65,7 @@ export default {
   },
   components: {
     appCourses: Courses,
-    appTbaCourses: TbaCourses
+    appSelectedCourses: SelectedCourses
   }
 }
 </script>
