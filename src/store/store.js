@@ -23,21 +23,8 @@ export default new Vuex.Store({
       newCourse.conflicts = false // default conflicts to false
       let updatedCourses = state.newSchedule.concat(newCourse)
       state.newSchedule = updatedCourses
-      // state.newSchedule.push(newCourse)
-
-      // console.log('***********************')
-      // console.log('ADD_COURSE: CURRENT STATE OF COURSE CONFLICTS:')
-      // let coursesOnSchedule = state.newSchedule.map(course => {
-      //   return {
-      //     [course.course_name]: course.conflicts
-      //   }
-      // })
-      // console.log(coursesOnSchedule)
-      // console.log('***********************')
     },
     REMOVE_COURSE: (state, course) => {
-      course.conflicts = false // reset conflicts to false
-
       state.newSchedule.splice(state.newSchedule.indexOf(course), 1)
 
       let updatedSchedule = state.newSchedule.map(eachCourse =>
@@ -45,16 +32,6 @@ export default new Vuex.Store({
       )
 
       state.newSchedule = updatedSchedule
-
-      console.log('***********************')
-      console.log('REMOVE_COURSE: CURRENT STATE OF COURSE CONFLICTS:')
-      let coursesOnSchedule = state.newSchedule.map(course => {
-        return {
-          [course.course_name]: course.conflicts
-        }
-      })
-      console.log(coursesOnSchedule)
-      console.log('***********************')
     },
     ASSIGN_COLOR: (state, { course, color }) => {
       let theCourse = state.newSchedule.find(c => c == course)
@@ -67,8 +44,6 @@ export default new Vuex.Store({
         let course = state.newSchedule.find(
           course => course.id == coursesWithConflicts[i]
         )
-
-        // console.log(`set conflict to true for ${course.course_name}`)
         course.conflicts = true // set conflicts to true for the matching course
       }
     },
