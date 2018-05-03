@@ -52,10 +52,11 @@ export default {
 
       if (courseExists.length === 0) {
         this.addCourse(this.course)
-      } else {
-        // click again to remove a course that has already been added
-        this.removeCourse(this.course)
       }
+      // else {
+      //   // click again to remove a course that has already been added
+      //   this.removeCourse(this.course)
+      // }
     }
   }
 }
