@@ -7,7 +7,25 @@
         @click="removeSelectedCourse(course)"
         :style="hasConflict(course)"
         class="selected-courses__course">
-          &times; &nbsp; {{ course.gwid }}-{{ course.section }} &nbsp; {{ course.course_name }} <span v-if="closed(course)"><i class="fas fa-lock"></i></span> <span v-if="tba(course)">(TBA)</span>
+          <div>&times;</div>
+          <div class="selected-courses__options selected-courses__options--closed">
+            <i v-if="closed(course)" class="fas fa-lock"></i></span>
+          </div>
+          <div>
+            {{ course.gwid }}-{{ course.section }}
+          </div>
+          <div>
+            {{ course.course_name }}
+          </div>
+          <div v-if="tba(course)" class="selected-courses__options selected-courses__options--tba">
+            (TBA)
+          </div>
+          <div v-if="course.conflicts" class="selected-courses__options selected-courses__options--conflict">
+            CONFLICT!
+          </div>
+          <div v-if="course.final_date" class="selected-courses__final">
+            Finals: {{ course.final_date }} <span v-if="course.final_time">at {{ course.final_time }}</span>
+          </div>
       </li>
     </ul>
     <p v-else class="selected-courses__none">You have no courses selected.</p>
@@ -32,7 +50,7 @@ export default {
     hasConflict(course) {
       if (course.conflicts) {
         return {
-          color: 'red'
+          color: '#ab9964'
         }
       }
     },
@@ -43,16 +61,6 @@ export default {
     },
     tba(course) {
       if (course.days == 'TBA') {
-        return true
-      }
-    },
-    finalDate(course) {
-      if (course.final_date) {
-        return true
-      }
-    },
-    finalTime(course) {
-      if (course.final_time) {
         return true
       }
     }
@@ -88,10 +96,37 @@ export default {
     margin: 1rem 0;
     transition: color .2s;
 
+    display: flex;
+    align-items: center;
+
+    & > * {
+      margin-right: 1rem;
+    }
+
     &:hover {
       cursor: pointer;
       color: var(--color-grey-dark-3);
     }
+  }
+
+  &__options {
+    font-size: var(--font-xs);
+
+    &--closed {
+      width: 1.5vw;
+      text-align: center;
+    }
+
+    &--conflict {
+      background-color: var(  --color-secondary);
+      color: #fff;
+      letter-spacing: .1rem;
+      padding: .1rem .4rem;
+    }
+  }
+
+  &__final {
+    margin-left: auto;
   }
 
   &__none {
