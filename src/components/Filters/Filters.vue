@@ -1,7 +1,11 @@
 <template>
   <div class="filters">
     <div class="filters__basic">
-      <input v-model="keyword" type="text" placeholder="Search courses" class="form-input filter__keyword">
+      <input
+        v-model="keywordFilter"
+        type="text"
+        placeholder="Search courses"
+        class="form-input filter__keyword">
       <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
       <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
       <button class="button-primary">Save Schedule</button>
@@ -9,6 +13,8 @@
 
     <!--  MORE FILTERS -->
     <div class="filters__advanced" v-if="showAdvancedFilters">
+
+      <!--  DAYS FILTER -->
       <div>
         <h3>Day(s)</h3>
         <div v-for="(day, index) in dayLabels">
@@ -21,9 +27,9 @@
             >
           <label :for="day">{{ day }}</label>
         </div>
-
-        <p v-for="day in days">{{day}}</p>
       </div>
+
+      <!--  HOURS FILTER -->
       <div>
         <h3>Hours</h3>
         <div v-for="(hrs, index) in hourLabels">
@@ -36,11 +42,8 @@
             >
           <label :for="hrs">{{ hrs }} {{ hrs == 'variable' ? '' : hrs < 2 ? 'hour' : 'hours' }}</label>
         </div>
-
-        <p v-for="hour in hours">{{hour}}</p>
-
       </div>
-      <!-- <button>Reset</button> -->
+      <button @click="resetFilter">Reset</button>
     </div>
   </div>
 </template>
@@ -61,15 +64,6 @@ export default {
   },
   computed: {
     ...mapGetters(['filter', 'newSchedule']),
-    keyword: {
-      get() {
-        return this.filter.filter
-      },
-      set(value) {
-        let keyword = value.toString().toLowerCase()
-        this.$store.dispatch('filterCourses', keyword)
-      }
-    },
     totalHours() {
       return this.newSchedule
         .filter(course => course.hours != 'variable') // ignore courses where hours property is 'variable'
@@ -86,19 +80,37 @@ export default {
         plus = '+'
       }
       return plus
+    },
+    keywordFilter: {
+      get() {
+        return this.filter.keyword
+      },
+      set(value) {
+        let keyword = value.toString().toLowerCase()
+        this.$store.dispatch('filterCourses', keyword)
+      }
     }
   },
   methods: {
+    ...mapActions([
+      'filterCoursesByDays',
+      'filterCoursesByHours',
+      'clearFilter'
+    ]),
     moreFilters($event) {
       $event.preventDefault()
       this.showAdvancedFilters = !this.showAdvancedFilters
     },
     updateDays() {
-      console.log('clicked days')
-      console.log(this.days)
+      this.filterCoursesByDays(this.days)
     },
     updateHours() {
-      console.log('clicked hours')
+      this.filterCoursesByHours(this.hours)
+    },
+    resetFilter() {
+      this.clearFilter()
+      this.days = this.filter.days
+      this.hours = this.filter.hours
     }
   }
 }
