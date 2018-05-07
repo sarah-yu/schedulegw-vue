@@ -27,14 +27,14 @@ export default {
       filter: 'filter'
     }),
     courses() {
-      if (this.filter) {
+      if (this.filter.filter) {
         return this.filteredCourses
       } else {
         return this.getCourses
       }
     },
     noCoursesFound() {
-      if (this.filter && this.filteredCourses.length == 0) {
+      if (this.filter.filter && this.filteredCourses.length == 0) {
         return true
       }
     }

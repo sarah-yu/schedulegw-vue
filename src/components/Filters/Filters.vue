@@ -2,46 +2,43 @@
   <div class="filters">
     <div class="filters__basic">
       <input v-model="keyword" type="text" placeholder="Search courses" class="form-input filter__keyword">
-      <!-- <select v-model="selected" class="filter__semester">
-        <option disabled value="">Semester:</option>
-        <option>Fall 2018</option>
-        <option>Spring 2018</option>
-        <option>Fall 2017</option>
-      </select> -->
       <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
       <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
-      <button class="button-primary">Save Schedule</button>
+      <button class="button-primary" @click="saveSchedule">Save Schedule</button>
     </div>
 
     <!--  MORE FILTERS -->
     <div class="filters__advanced" v-if="showAdvancedFilters">
       <div>
         <h3>Day(s)</h3>
-        <input type="checkbox" id="monday" value="Monday" v-model="days">
-        <label for="monday">Monday</label>
-        <input type="checkbox" id="tuesday" value="Tuesday" v-model="days">
-        <label for="tuesday">Tuesday</label>
-        <input type="checkbox" id="wednesday" value="Wednesday" v-model="days">
-        <label for="wednesday">Wednesday</label>
-        <input type="checkbox" id="thursday" value="Thursday" v-model="days">
-        <label for="thursday">Thursday</label>
-        <input type="checkbox" id="friday" value="Friday" v-model="days">
-        <label for="friday">Friday</label>
-        <input type="checkbox" id="weekend" value="Weekend" v-model="days">
-        <label for="weekend">Weekend</label>
+        <div v-for="(day, index) in dayLabels">
+          <input
+            type="checkbox"
+            :id="day"
+            :value="index + 1"
+            v-model="days"
+            @change="updateDays"
+            >
+          <label :for="day">{{ day }}</label>
+        </div>
+
+        <p v-for="day in days">{{day}}</p>
       </div>
       <div>
         <h3>Hours</h3>
-        <input type="checkbox" id="hours-1" value="1" v-model="days">
-        <label for="hours-1">1 hour</label>
-        <input type="checkbox" id="hours-2" value="2" v-model="days">
-        <label for="hours-2">2 hours</label>
-        <input type="checkbox" id="hours-3" value="3" v-model="days">
-        <label for="hours-3">3 hours</label>
-        <input type="checkbox" id="hours-4" value="4" v-model="days">
-        <label for="hours-4">4 hours</label>
-        <input type="checkbox" id="hours-var" value="5" v-model="days">
-        <label for="hours-var">5 hours</label>
+        <div v-for="(hrs, index) in hourLabels">
+          <input
+            type="checkbox"
+            :id="hrs"
+            :value="hrs == 'variable' ? 'variable' : index + 1"
+            v-model="hours"
+            @change="updateHours"
+            >
+          <label :for="hrs">{{ hrs }} {{ hrs == 'variable' ? '' : hrs < 2 ? 'hour' : 'hours' }}</label>
+        </div>
+
+        <p v-for="hour in hours">{{hour}}</p>
+
       </div>
       <!-- <button>Reset</button> -->
     </div>
@@ -55,7 +52,10 @@ export default {
   data() {
     return {
       selected: 'Fall 2018',
+      dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      hourLabels: ['1', '2', '3', '4', '5', 'variable'],
       days: [],
+      hours: [],
       showAdvancedFilters: false
     }
   },
@@ -63,7 +63,7 @@ export default {
     ...mapGetters(['filter', 'newSchedule']),
     keyword: {
       get() {
-        return this.filter
+        return this.filter.filter
       },
       set(value) {
         let keyword = value.toString().toLowerCase()
@@ -85,14 +85,28 @@ export default {
       if (varHours.length > 0) {
         plus = '+'
       }
-
       return plus
     }
   },
   methods: {
+    ...mapActions(['filterCoursesByDay', 'postSchedule']),
     moreFilters($event) {
       $event.preventDefault()
       this.showAdvancedFilters = !this.showAdvancedFilters
+    },
+    updateDays() {
+      console.log('clicked days')
+
+      this.filterCoursesByDay(this.days)
+    },
+    updateHours() {
+      console.log('clicked hours')
+    },
+    saveSchedule() {
+      console.log('saving schedule')
+      console.log(this.newSchedule)
+
+      this.postSchedule()
     }
   }
 }

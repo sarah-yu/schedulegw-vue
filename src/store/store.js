@@ -9,8 +9,9 @@ export default new Vuex.Store({
     courses: [],
     newSchedule: [],
     filteredCourses: [],
-    filter: '',
-    daysFilter: []
+    filter: {
+      filter: ''
+    }
   },
   mutations: {
     LOAD_COURSES: state => {
@@ -48,14 +49,14 @@ export default new Vuex.Store({
       }
     },
     FILTER_COURSES: (state, filter) => {
-      state.filter = filter
+      state.filter.filter = filter
 
       let filteredCourses = state.courses.filter(course => {
         let courseName = course.course_name.toLowerCase()
         return (
-          courseName.indexOf(state.filter) != -1 ||
-          course.gwid.indexOf(state.filter) != -1 ||
-          course.professor_name.indexOf(state.filter) != -1
+          courseName.indexOf(state.filter.filter) != -1 ||
+          course.gwid.indexOf(state.filter.filter) != -1 ||
+          course.professor_name.indexOf(state.filter.filter) != -1
         )
       })
       state.filteredCourses = filteredCourses
@@ -158,9 +159,7 @@ export default new Vuex.Store({
 
       commit('ADD_CONFLICT', coursesWithConflicts)
     },
-    filterCourses: ({ commit }, filter) => commit('FILTER_COURSES', filter),
-    filterCoursesByDay: ({ commit }, days) =>
-      commit('FILTER_COURSES_BY_DAY', days)
+    filterCourses: ({ commit }, filter) => commit('FILTER_COURSES', filter)
   },
   getters: {
     filter: state => state.filter,
