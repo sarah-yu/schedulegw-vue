@@ -4,7 +4,7 @@
       <input v-model="keyword" type="text" placeholder="Search courses" class="form-input filter__keyword">
       <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
       <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
-      <button class="button-primary" @click="saveSchedule">Save Schedule</button>
+      <button class="button-primary">Save Schedule</button>
     </div>
 
     <!--  MORE FILTERS -->
@@ -89,24 +89,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['filterCoursesByDay', 'postSchedule']),
     moreFilters($event) {
       $event.preventDefault()
       this.showAdvancedFilters = !this.showAdvancedFilters
     },
     updateDays() {
       console.log('clicked days')
-
-      this.filterCoursesByDay(this.days)
+      console.log(this.days)
     },
     updateHours() {
       console.log('clicked hours')
-    },
-    saveSchedule() {
-      console.log('saving schedule')
-      console.log(this.newSchedule)
-
-      this.postSchedule()
     }
   }
 }
