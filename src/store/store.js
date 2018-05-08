@@ -50,67 +50,82 @@ export default new Vuex.Store({
         course.conflicts = true // set conflicts to true for the matching course
       }
     },
-    FILTER_COURSES: (state, filter) => {
-      state.filter.keyword = filter
+    // FILTER_COURSES: (state, filter) => {
+    //   state.filter.keyword = filter
+    //
+    //   let filteredCourses = state.courses.filter(course => {
+    //     let courseName = course.course_name.toLowerCase()
+    //     return (
+    //       courseName.indexOf(state.filter.keyword) != -1 ||
+    //       course.gwid.indexOf(state.filter.keyword) != -1 ||
+    //       course.professor_name.indexOf(state.filter.keyword) != -1
+    //     )
+    //   })
+    //   state.filteredCourses = filteredCourses
+    // },
+    FILTER_COURSES: (state, { filterType, filterValue }) => {
+      console.log('FILTER_COURSES')
+      console.log(filterType)
+      console.log(filterValue)
+
+      state.filter[filterType] = filterValue
 
       let filteredCourses = state.courses.filter(course => {
-        let courseName = course.course_name.toLowerCase()
-        return (
-          courseName.indexOf(state.filter.keyword) != -1 ||
-          course.gwid.indexOf(state.filter.keyword) != -1 ||
-          course.professor_name.indexOf(state.filter.keyword) != -1
-        )
-      })
-      state.filteredCourses = filteredCourses
-    },
-    FILTER_COURSES_BY_DAYS: (state, days) => {
-      state.filter.days = days
+        let ok = true
 
-      let filterExists = Object.values(state.filter).some(
-        property => property.length > 0
-      )
+        // keyword filter
+        if (state.filter.keyword) {
+          console.log('FILTERING BY KEYWORD...')
 
-      let courses
-      if (state.filteredCourses.length > 0 || filterExists) {
-        courses = state.filteredCourses
-      } else {
-        courses = state.courses
-      }
-
-      let filteredCourses = state.courses.filter(course => {
-        for (let i = 0; i < state.filter.days.length; i++) {
-          let n = state.filter.days[i]
-          let day = `day${n}_start`
-
-          return course[day] != null
+          let courseName = course.course_name.toLowerCase()
+          ok =
+            courseName.indexOf(state.filter.keyword) != -1 ||
+            course.gwid.indexOf(state.filter.keyword) != -1 ||
+            course.professor_name.indexOf(state.filter.keyword) != -1
         }
-      })
 
-      console.log(filteredCourses)
+        // days filter
+        if (ok && state.filter.days.length > 0) {
+          console.log('FILTERING BY DAYS...')
 
-      state.filteredCourses = filteredCourses
-    },
-    FILTER_COURSES_BY_HOURS: (state, hours) => {
-      state.filter.hours = hours
-
-      let filterExists = Object.values(state.filter).some(
-        property => property.length > 0
-      )
-
-      let courses
-      if (state.filteredCourses.length > 0 || filterExists) {
-        courses = state.filteredCourses
-      } else {
-        courses = state.courses
-      }
-
-      let filteredCourses = courses.filter(course => {
-        for (let i = 0; i < state.filter.hours.length; i++) {
-          return course.hours == hours[i]
+          for (let i = 0; i < state.filter.days.length; i++) {
+            let n = state.filter.days[i]
+            let day = `day${n}_start`
+            if (course[day]) {
+              ok = true
+              break
+            } else {
+              ok = false
+            }
+          }
         }
+
+        // hours filter
+        if (ok && state.filter.hours.length > 0) {
+          console.log('FILTERING BY HOURS...')
+
+          for (let i = 0; i < state.filter.hours.length; i++) {
+            if (course.hours == state.filter.hours[i]) {
+              ok = true
+              break
+            } else {
+              ok = false
+            }
+          }
+        }
+
+        return ok
       })
 
-      console.log(filteredCourses)
+      console.log(
+        filteredCourses.map(course => {
+          return {
+            name: course.course_name,
+            days: course.days,
+            hours: course.hours
+          }
+        })
+      )
 
       state.filteredCourses = filteredCourses
     },
@@ -219,11 +234,12 @@ export default new Vuex.Store({
 
       commit('ADD_CONFLICT', coursesWithConflicts)
     },
-    filterCourses: ({ commit }, filter) => commit('FILTER_COURSES', filter),
-    filterCoursesByDays: ({ commit }, days) =>
-      commit('FILTER_COURSES_BY_DAYS', days),
-    filterCoursesByHours: ({ commit }, hours) =>
-      commit('FILTER_COURSES_BY_HOURS', hours),
+    filterCourses: ({ commit }, [filterType, filterValue]) => {
+      commit('FILTER_COURSES', {
+        filterType: filterType,
+        filterValue: filterValue
+      })
+    },
     clearFilter: ({ commit }) => commit('CLEAR_FILTER')
   },
   getters: {

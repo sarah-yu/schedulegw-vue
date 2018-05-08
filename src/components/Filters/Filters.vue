@@ -87,25 +87,21 @@ export default {
       },
       set(value) {
         let keyword = value.toString().toLowerCase()
-        this.$store.dispatch('filterCourses', keyword)
+        this.$store.dispatch('filterCourses', ['keyword', keyword])
       }
     }
   },
   methods: {
-    ...mapActions([
-      'filterCoursesByDays',
-      'filterCoursesByHours',
-      'clearFilter'
-    ]),
+    ...mapActions(['filterCourses', 'clearFilter']),
     moreFilters($event) {
       $event.preventDefault()
       this.showAdvancedFilters = !this.showAdvancedFilters
     },
     updateDays() {
-      this.filterCoursesByDays(this.days)
+      this.filterCourses(['days', this.days])
     },
     updateHours() {
-      this.filterCoursesByHours(this.hours)
+      this.filterCourses(['hours', this.hours])
     },
     resetFilter() {
       this.clearFilter()
