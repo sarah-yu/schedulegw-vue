@@ -50,33 +50,14 @@ export default new Vuex.Store({
         course.conflicts = true // set conflicts to true for the matching course
       }
     },
-    // FILTER_COURSES: (state, filter) => {
-    //   state.filter.keyword = filter
-    //
-    //   let filteredCourses = state.courses.filter(course => {
-    //     let courseName = course.course_name.toLowerCase()
-    //     return (
-    //       courseName.indexOf(state.filter.keyword) != -1 ||
-    //       course.gwid.indexOf(state.filter.keyword) != -1 ||
-    //       course.professor_name.indexOf(state.filter.keyword) != -1
-    //     )
-    //   })
-    //   state.filteredCourses = filteredCourses
-    // },
     FILTER_COURSES: (state, { filterType, filterValue }) => {
-      console.log('FILTER_COURSES')
-      console.log(filterType)
-      console.log(filterValue)
-
-      state.filter[filterType] = filterValue
+      state.filter[filterType] = filterValue // set filters in state
 
       let filteredCourses = state.courses.filter(course => {
         let ok = true
 
         // keyword filter
         if (state.filter.keyword) {
-          console.log('FILTERING BY KEYWORD...')
-
           let courseName = course.course_name.toLowerCase()
           ok =
             courseName.indexOf(state.filter.keyword) != -1 ||
@@ -86,8 +67,6 @@ export default new Vuex.Store({
 
         // days filter
         if (ok && state.filter.days.length > 0) {
-          console.log('FILTERING BY DAYS...')
-
           for (let i = 0; i < state.filter.days.length; i++) {
             let n = state.filter.days[i]
             let day = `day${n}_start`
@@ -102,8 +81,6 @@ export default new Vuex.Store({
 
         // hours filter
         if (ok && state.filter.hours.length > 0) {
-          console.log('FILTERING BY HOURS...')
-
           for (let i = 0; i < state.filter.hours.length; i++) {
             if (course.hours == state.filter.hours[i]) {
               ok = true
@@ -116,16 +93,6 @@ export default new Vuex.Store({
 
         return ok
       })
-
-      console.log(
-        filteredCourses.map(course => {
-          return {
-            name: course.course_name,
-            days: course.days,
-            hours: course.hours
-          }
-        })
-      )
 
       state.filteredCourses = filteredCourses
     },
@@ -190,9 +157,6 @@ export default new Vuex.Store({
             }
           })
 
-        // console.log(`${courses.length} courses in day ${n}:`)
-        // console.log(courses)
-
         // if there's more than 1 course on any day of the week, check for conflicts
         if (courses.length > 1) {
           for (let i = 0; i < courses.length; i++) {
@@ -201,8 +165,6 @@ export default new Vuex.Store({
             // only compare unique course pairing combinations
             for (let j = i + 1; j < courses.length; j++) {
               let course2 = courses[j]
-
-              // console.log(`comparing ${course1.name} to ${course2.name}`);
 
               // compare course1 to course2
               if (
@@ -228,9 +190,6 @@ export default new Vuex.Store({
       coursesWithConflicts = coursesWithConflicts
         .map(course => course.id)
         .filter((course, i, self) => self.indexOf(course) === i)
-
-      // console.log('COURSES WITH CONFLICTS:')
-      // console.log(coursesWithConflicts)
 
       commit('ADD_CONFLICT', coursesWithConflicts)
     },
