@@ -1,14 +1,18 @@
 <template>
   <div class="filters">
     <div class="filters__basic">
-      <input
-        v-model="keywordFilter"
-        type="text"
-        placeholder="Search courses"
-        class="form-input filter__keyword">
-      <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
-      <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
-      <button class="button-primary">Save Schedule</button>
+      <div class="filters__basic--left">
+        <input
+          v-model="keywordFilter"
+          type="text"
+          placeholder="Search courses"
+          class="form-input filter__keyword">
+        <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
+      </div>
+      <div class="filters__basic--right">
+        <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
+        <button class="button-primary schedules__save-button">Save Schedule</button>
+      </div>
     </div>
 
     <!--  MORE FILTERS -->
@@ -51,7 +55,7 @@
         </div>
       </div>
 
-      <button @click="resetFilter" class="filters__reset-btn">Reset Filters</button>
+      <button @click="resetFilter" class="filters__reset-button">Reset Filters</button>
     </div>
   </div>
 </template>
@@ -131,17 +135,52 @@ export default {
   flex-direction: column;
   justify-content: center;
 
-  & > * {
-    padding: 1rem 3rem;
+  @media only screen and (max-width: 500px) {
+    font-size: var(--font-s);
   }
 
   &__basic {
     display: flex;
     align-items: center;
+    padding: 1rem 3rem;
 
     @media only screen and (max-width: 768px) {
-      flex-flow: row wrap;
+      flex-direction: column;
+      justify-content: center;
     }
+
+    @media only screen and (max-width: 500px) {
+      padding: 0;
+    }
+
+    &--left {
+      margin-right: auto;
+
+      @media only screen and (max-width: 768px) {
+        margin-right: 0;
+      }
+    }
+
+    &--right {
+      display: flex;
+      align-items: center;
+
+      @media only screen and (max-width: 768px) {
+        width: 50vw;
+        justify-content: center;
+
+        margin-top: 3rem;
+      }
+
+      @media only screen and (max-width: 500px) {
+        width: 80vw;
+        justify-content: space-around;
+      }
+    }
+  }
+
+  &__advanced {
+    padding: 1rem 5rem;
   }
 
   &__advanced-container {
@@ -149,10 +188,14 @@ export default {
     align-items: flex-start;
 
     margin-top: 1.5rem;
+
+    @media only screen and (max-width: 768px) {
+      justify-content: center;
+    }
   }
 
-  &__reset-btn {
-    margin-top: 3rem;
+  &__reset-button {
+    margin-top: 2rem;
     float: right;
 
     background-color: transparent;
@@ -164,6 +207,13 @@ export default {
     font-weight: 700;
     letter-spacing: .08rem;
     text-transform: uppercase;
+
+    @media only screen and (max-width: 768px) {
+      float: none;
+      display: block;
+      margin: 0 auto;
+      margin-top: 4rem;
+    }
 
     &:hover,
     &:focus,
@@ -178,6 +228,14 @@ export default {
 .filter {
   &__keyword {
     margin-right: 2rem;
+
+    @media only screen and (max-width: 768px) {
+      width: 75vw;
+    }
+
+    @media only screen and (max-width: 620px) {
+      width: 65vw;
+    }
   }
 
   &__more-filters {
@@ -186,7 +244,6 @@ export default {
     letter-spacing: .08rem;
     text-decoration: none;
     text-transform: uppercase;
-    margin-right: auto;
   }
 
   &__days {
@@ -202,6 +259,7 @@ export default {
   &__checkboxes {
     display: flex;
     flex-flow: row wrap;
+    align-content: flex-start;
   }
 
   &__checkbox {
@@ -214,10 +272,19 @@ export default {
 }
 
 .total-hours {
+  display: block;
   color: var(--color-grey-dark-1);
   font-weight: 700;
   letter-spacing: .08rem;
   text-transform: uppercase;
   margin-right: 2rem;
+}
+
+.schedules {
+  &__save-button {
+    @media only screen and (max-width: 500px) {
+      font-size: var(--font-s);
+    }
+  }
 }
 </style>
