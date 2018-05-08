@@ -13,37 +13,45 @@
 
     <!--  MORE FILTERS -->
     <div class="filters__advanced" v-if="showAdvancedFilters">
+      <div class="filters__advanced-container">
+        <!--  DAYS FILTER -->
+        <div class="filter__days">
+          <h3 class="filter__heading">Days</h3>
+          <div class="filter__checkboxes">
+            <div v-for="(day, index) in dayLabels" class="filter__checkbox">
+              <input
+                type="checkbox"
+                :id="day"
+                :value="index + 1"
+                v-model="days"
+                @change="updateDays"
+                class="filter__checkbox-input"
+                >
+              <label :for="day" class="filter__checkbox-label">{{ day }}</label>
+            </div>
+          </div>
+        </div>
 
-      <!--  DAYS FILTER -->
-      <div>
-        <h3>Day(s)</h3>
-        <div v-for="(day, index) in dayLabels">
-          <input
-            type="checkbox"
-            :id="day"
-            :value="index + 1"
-            v-model="days"
-            @change="updateDays"
-            >
-          <label :for="day">{{ day }}</label>
+        <!--  HOURS FILTER -->
+        <div class="filter__hours">
+          <h3 class="filter__heading">Hours</h3>
+          <div class="filter__checkboxes">
+            <div v-for="(hrs, index) in hourLabels" class="filter__checkbox">
+              <input
+                type="checkbox"
+                :id="hrs"
+                :value="hrs == 'variable' ? 'variable' : index + 1"
+                v-model="hours"
+                @change="updateHours"
+                class="filter__checkbox-input"
+                >
+              <label :for="hrs" class="filter__checkbox-label">{{ hrs }} {{ hrs == 'variable' ? '' : hrs < 2 ? 'hour' : 'hours' }}</label>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!--  HOURS FILTER -->
-      <div>
-        <h3>Hours</h3>
-        <div v-for="(hrs, index) in hourLabels">
-          <input
-            type="checkbox"
-            :id="hrs"
-            :value="hrs == 'variable' ? 'variable' : index + 1"
-            v-model="hours"
-            @change="updateHours"
-            >
-          <label :for="hrs">{{ hrs }} {{ hrs == 'variable' ? '' : hrs < 2 ? 'hour' : 'hours' }}</label>
-        </div>
-      </div>
-      <button @click="resetFilter">Reset</button>
+      <button @click="resetFilter" class="filters__reset-btn">Reset Filters</button>
     </div>
   </div>
 </template>
@@ -56,7 +64,7 @@ export default {
     return {
       selected: 'Fall 2018',
       dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      hourLabels: ['1', '2', '3', '4', '5', 'variable'],
+      hourLabels: ['1', '2', '3', '4', 'variable'],
       days: [],
       hours: [],
       showAdvancedFilters: false
@@ -114,24 +122,56 @@ export default {
 
 <style lang="scss">
 .filters {
+  font-size: var(--font-m);
   border-bottom: 1px solid var(--color-grey-light-2);
   min-height: 11vh;
-  padding: 3rem;
+  padding: 2rem 0;
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
+
+  & > * {
+    padding: 1rem 3rem;
+  }
 
   &__basic {
     display: flex;
     align-items: center;
-    padding: 1rem 3rem;
+
+    @media only screen and (max-width: 768px) {
+      flex-flow: row wrap;
+    }
   }
 
-  &__advanced {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    padding: 1rem 3rem;
+  &__advanced-container {
+    display: flex;
+    align-items: flex-start;
 
+    margin-top: 1.5rem;
+  }
+
+  &__reset-btn {
+    margin-top: 3rem;
+    float: right;
+
+    background-color: transparent;
+    border: none;
+    border-bottom: .2rem solid currentColor;
+    color: var(--color-grey-dark-3);
+    font-family: var(--font-primary);
+    font-size: var(--font-s);
+    font-weight: 700;
+    letter-spacing: .08rem;
+    text-transform: uppercase;
+
+    &:hover,
+    &:focus,
+    &:active {
+      cursor: pointer;
+      color: var(--color-grey-dark-2);
+      outline: none;
+    }
   }
 }
 
@@ -142,18 +182,39 @@ export default {
 
   &__more-filters {
     color: var(--color-grey-dark-1);
-    font-size: var(--font-s);
     font-weight: 700;
     letter-spacing: .08rem;
     text-decoration: none;
     text-transform: uppercase;
     margin-right: auto;
   }
+
+  &__days {
+    margin-right: 8rem;
+  }
+
+  &__heading {
+    font-size: var(--font-s);
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+  }
+
+  &__checkboxes {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  &__checkbox {
+    padding: .5rem 2rem .5rem 0;
+  }
+
+  &__checkbox-label {
+    margin-left: .5rem;
+  }
 }
 
 .total-hours {
   color: var(--color-grey-dark-1);
-  font-size: var(--font-s);
   font-weight: 700;
   letter-spacing: .08rem;
   text-transform: uppercase;
