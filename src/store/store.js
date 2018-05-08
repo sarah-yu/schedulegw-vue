@@ -98,7 +98,7 @@ export default new Vuex.Store({
     },
     CLEAR_FILTER: state => {
       state.filter = {
-        keyworld: '',
+        keyword: '',
         days: [],
         hours: []
       }
