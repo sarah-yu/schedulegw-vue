@@ -27,16 +27,19 @@ export default {
       filter: 'filter'
     }),
     courses() {
-      if (this.filter) {
+      if (this.filterExists) {
         return this.filteredCourses
       } else {
         return this.getCourses
       }
     },
     noCoursesFound() {
-      if (this.filter && this.filteredCourses.length == 0) {
+      if (this.filterExists && this.filteredCourses.length == 0) {
         return true
       }
+    },
+    filterExists() {
+      return Object.values(this.filter).some(property => property.length > 0)
     }
   },
   created() {
