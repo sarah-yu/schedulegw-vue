@@ -1,9 +1,10 @@
 <template lang="html">
   <header class="header">
     <nav class="header__nav">
-      <a href="/" class="header__link header__logo">Schedule/GW</a>
-      <a href="#" class="header__link">My Schedules</a>
-      <a href="#" class="header__link">Me</a>
+      <router-link to="/" class="header__link header__logo">Schedule/GW</router-link>
+      <a href="http://localhost:5000/signin" class="header__link">Sign In</a>
+      <router-link to="/schedules" class="header__link">My Schedules</router-link>
+      <a href="http://localhost:5000/signout" class="header__link">Sign Out</a>
     </nav>
   </header>
 </template>
@@ -27,11 +28,6 @@ export default {}
     color: #fff;
     text-decoration: none;
     padding: .5rem;
-
-
-    &:last-of-type {
-      margin-left: 1rem;
-    }
   }
 
   &__logo {
