@@ -13,7 +13,8 @@ export default new Vuex.Store({
       keyword: '',
       days: [],
       hours: []
-    }
+    },
+    schedules: []
   },
   mutations: {
     LOAD_COURSES: state => {
@@ -111,6 +112,9 @@ export default new Vuex.Store({
         .post('/schedules', state.newSchedule)
         .then(res => console.log(res))
         .catch(err => console.log(err))
+    },
+    LOAD_SCHEDULES: (state, schedules) => {
+      state.schedules = schedules.data
     }
   },
   actions: {
@@ -209,12 +213,19 @@ export default new Vuex.Store({
       })
     },
     clearFilter: ({ commit }) => commit('CLEAR_FILTER'),
-    saveSchedule: ({ commit }) => commit('SAVE_SCHEDULE')
+    saveSchedule: ({ commit }) => commit('SAVE_SCHEDULE'),
+    loadSchedules: ({ commit }) => {
+      axios
+        .get('/schedules')
+        .then(schedules => commit('LOAD_SCHEDULES', schedules))
+        .catch(err => console.log(err))
+    }
   },
   getters: {
     filter: state => state.filter,
     filteredCourses: state => state.filteredCourses,
     courses: state => state.courses,
-    newSchedule: state => state.newSchedule
+    newSchedule: state => state.newSchedule,
+    getSchedules: state => state.schedules
   }
 })
