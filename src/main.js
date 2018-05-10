@@ -9,7 +9,10 @@ import { routes } from './routes'
 import './assets/sass/main.scss'
 
 Vue.use(VueRouter)
-const router = new VueRouter({ routes })
+const router = new VueRouter({
+  mode: 'history',
+  routes
+})
 
 axios.defaults.baseURL = 'http://localhost:3001/api'
 
