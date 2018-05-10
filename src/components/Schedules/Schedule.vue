@@ -1,6 +1,13 @@
 <template lang="html">
   <div class="schedule">
-    <h3 class="schedule__name">{{ schedule.name }}</h3>
+    <div class="schedule__name-container">
+      <h3 v-if="!isEditing" class="schedule__name">{{ schedule.name }}</h3>
+      <input v-else type="text" v-model="schedule.name" class="schedule__name-edit-input">
+      <div class="schedule__name-edit-button" @click="isEditing = !isEditing">
+        <span v-if="!isEditing">Edit</span>
+        <span v-else @click="saveName">Save</span>
+      </div>
+    </div>
     <div
       v-for="course in courses"
       class="schedule__courses">
@@ -15,7 +22,7 @@
     <div class="schedule__course-actions">
       <div class="schedule__course-actions--left">
         <button class="schedule__action schedule__action--view">View</button>
-        <button class="schedule__action schedule__action--delete">Delete</button>
+        <button @click="removeSchedule" class="schedule__action schedule__action--delete">Delete</button>
       </div>
       <div class="schedule__course-actions--right">
         <button class="schedule__action schedule__action--email">Email</button>
@@ -27,12 +34,24 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   props: ['schedule'],
   data() {
     return {
-      courses: []
+      courses: [],
+      isEditing: false
+    }
+  },
+  methods: {
+    ...mapActions(['deleteSchedule', 'editSchedule']),
+    removeSchedule() {
+      this.deleteSchedule(this.schedule._id)
+      this.$router.push('/schedules')
+    },
+    saveName() {
+      this.editSchedule([this.schedule._id, this.schedule.name])
     }
   },
   created() {
@@ -60,9 +79,38 @@ export default {
   padding: 5rem 6rem;
   box-shadow: 0 .5rem 2.5rem var(--color-grey-light-3);
 
+  &__name-container {
+    display: flex;
+    align-items: center;
+  }
+
   &__name {
     font-size: var(--font-xl);
     font-weight: 400;
+  }
+
+  &__name-edit-input {
+    font-family: var(--font-primary);
+    font-size: var(--font-xl);
+    padding: .5rem 1rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__name-edit-button {
+    margin-left: 2rem;
+    font-size: var(--font-xs);
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+    border-bottom: 1px solid currentColor;
+
+    &:focus,
+    &:hover,
+    &:active {
+      cursor: pointer;
+    }
   }
 
   &__course {
@@ -127,8 +175,15 @@ export default {
 
     &--delete {
       color: var(--color-grey-dark-3);
-      border: 1px solid currentColor;
+      border: 1px solid var(--color-grey-light-3);
       background-color: transparent;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: var(--color-grey-dark-1);
+        border: 1px solid var(--color-grey-dark-3);
+      }
     }
 
     &--email,
