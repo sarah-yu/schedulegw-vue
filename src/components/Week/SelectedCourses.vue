@@ -11,10 +11,10 @@
           <div class="selected-courses__options selected-courses__options--closed">
             <i v-if="closed(course)" class="fas fa-lock"></i></span>
           </div>
-          <div>
+          <div class="selected-courses__id">
             {{ course.gwid }}-{{ course.section }}
           </div>
-          <div>
+          <div class="selected-courses__name">
             {{ course.course_name }}
           </div>
           <div v-if="tba(course)" class="selected-courses__options selected-courses__options--tba">
