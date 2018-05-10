@@ -219,6 +219,20 @@ export default new Vuex.Store({
         .get('/schedules')
         .then(schedules => commit('LOAD_SCHEDULES', schedules))
         .catch(err => console.log(err))
+    },
+    deleteSchedule: ({ commit }, scheduleId) => {
+      axios
+        .delete(`/schedules/${scheduleId}`)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
+    },
+    editSchedule: ({ commit }, [scheduleId, newName]) => {
+      axios
+        .put(`/schedules/${scheduleId}`, {
+          name: newName
+        })
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
     }
   },
   getters: {
