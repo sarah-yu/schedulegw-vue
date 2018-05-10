@@ -10,7 +10,7 @@
       </select> -->
       <a href="#" class="filter__more-filters" @click="moreFilters">Filters <span v-if="!showAdvancedFilters">+</span><span v-else>&ndash;</span></a>
       <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
-      <button class="button-primary">Save Schedule</button>
+      <button class="button-primary" @click="saveSchedule">Save Schedule</button>
     </div>
 
     <!--  MORE FILTERS -->
@@ -90,9 +90,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      postSchedule: "saveSchedule"
+    }),
+
     moreFilters($event) {
       $event.preventDefault()
       this.showAdvancedFilters = !this.showAdvancedFilters
+    },
+    saveSchedule() {
+      this.postSchedule()
     }
   }
 }

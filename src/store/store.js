@@ -59,7 +59,16 @@ export default new Vuex.Store({
         )
       })
       state.filteredCourses = filteredCourses
-    }
+    },
+    SAVE_SCHEDULE: state => {
+     let savedSchedule = state.newSchedule
+
+     axios
+       .post('/schedule', savedSchedule)
+       .then(res => (console.log(res)))
+       .catch(err => console.log(err))
+
+   }
   },
   actions: {
     loadCourses: ({ commit }) => commit('LOAD_COURSES'),
@@ -160,7 +169,8 @@ export default new Vuex.Store({
     },
     filterCourses: ({ commit }, filter) => commit('FILTER_COURSES', filter),
     filterCoursesByDay: ({ commit }, days) =>
-      commit('FILTER_COURSES_BY_DAY', days)
+      commit('FILTER_COURSES_BY_DAY', days),
+    saveSchedule: ({ commit }) => commit('SAVE_SCHEDULE'),
   },
   getters: {
     filter: state => state.filter,
