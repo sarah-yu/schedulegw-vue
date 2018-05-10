@@ -102,6 +102,15 @@ export default new Vuex.Store({
         days: [],
         hours: []
       }
+    },
+    SAVE_SCHEDULE: state => {
+      console.log('saving schedule')
+      console.log(state.newSchedule)
+
+      axios
+        .post('/schedules', state.newSchedule)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
     }
   },
   actions: {
@@ -199,7 +208,8 @@ export default new Vuex.Store({
         filterValue: filterValue
       })
     },
-    clearFilter: ({ commit }) => commit('CLEAR_FILTER')
+    clearFilter: ({ commit }) => commit('CLEAR_FILTER'),
+    saveSchedule: ({ commit }) => commit('SAVE_SCHEDULE')
   },
   getters: {
     filter: state => state.filter,
