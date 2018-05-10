@@ -11,7 +11,7 @@
       </div>
       <div class="filters__basic--right">
         <p v-if="totalHours" class="total-hours">{{ totalHours }}<span v-if="variableHours">{{ variableHours }}</span> Hours</p>
-        <button class="button-primary schedules__save-button">Save Schedule</button>
+        <button @click="saveSchedule" class="button-primary schedules__save-button">Save Schedule</button>
       </div>
     </div>
 
@@ -104,7 +104,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['filterCourses', 'clearFilter']),
+    ...mapActions({
+      filterCourses: 'filterCourses',
+      clearFilter: 'clearFilter',
+      postSchedule: 'saveSchedule'
+    }),
     moreFilters($event) {
       $event.preventDefault()
       this.showAdvancedFilters = !this.showAdvancedFilters
@@ -119,6 +123,9 @@ export default {
       this.clearFilter()
       this.days = this.filter.days
       this.hours = this.filter.hours
+    },
+    saveSchedule() {
+      this.postSchedule()
     }
   }
 }
