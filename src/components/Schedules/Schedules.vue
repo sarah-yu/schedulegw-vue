@@ -49,5 +49,14 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+
+  &__no-schedules-found {
+    margin-top: 5rem;
+
+    p {
+      color: var(--color-grey-dark-3);
+      font-size: var(--font-xl);
+    }
+  }
 }
 </style>
