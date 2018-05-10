@@ -126,6 +126,7 @@ export default {
     },
     saveSchedule() {
       this.postSchedule()
+      this.$router.push('/schedules')
     }
   }
 }
