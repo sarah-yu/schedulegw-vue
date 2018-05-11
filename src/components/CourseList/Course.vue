@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="course"
     @click="selectCourse"
-    :class="{'course--selected': selected, 'course--greyed-out': tba || closed}">
+    :class="{'course--selected': selected, 'course--greyed-out': closed}">
     <div class="course__closed">
       <span v-if="closed"><i class="fas fa-lock"></i></span>
     </div>
@@ -25,8 +25,9 @@ export default {
   computed: {
     ...mapGetters(['newSchedule']),
     selected() {
-      return this.newSchedule.filter(eachCourse => eachCourse == this.course)
-        .length > 0
+      return this.newSchedule.filter(
+        eachCourse => eachCourse.id == this.course.id
+      ).length > 0
         ? true
         : false
     },
@@ -42,22 +43,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addCourse', 'assignColor', 'removeCourse']),
+    ...mapActions(['addCourse', 'removeCourse']),
     selectCourse() {
-      console.log('SELECTED COURSE:')
-      console.log(this.course)
-
       // check if course has already been added
       let courseExists = this.newSchedule.filter(
-        course => course == this.course
+        course => course.id == this.course.id
       )
 
       if (courseExists.length === 0) {
-        this.addCourse(this.course) // add course to newSchedule array
-        this.assignColor(this.course) // assign random color to course
-      } else {
-        this.removeCourse(this.course)
+        this.addCourse(this.course)
       }
+      // else {
+      //   // click again to remove a course that has already been added
+      //   this.removeCourse(this.course)
+      // }
     }
   }
 }

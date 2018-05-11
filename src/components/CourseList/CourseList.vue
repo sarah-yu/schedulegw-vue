@@ -2,7 +2,15 @@
   <div class="course-list">
     <h2 class="course-list__header">Course List</h2>
     <div class="course-list__container">
-      <app-course v-for="course in courses" :course="course" :key="course.id"></app-course>
+      <app-course
+        v-for="course in courses"
+        :course="course"
+        :key="course.id"></app-course>
+        <div
+          class="course-list__no-courses-found"
+          v-if="noCoursesFound">
+          <p>No courses match your search criteria.</p>
+        </div>
     </div>
   </div>
 </template>
@@ -15,15 +23,23 @@ export default {
   computed: {
     ...mapGetters({
       getCourses: 'courses',
-      fCourses: 'fCourses',
+      filteredCourses: 'filteredCourses',
       filter: 'filter'
     }),
     courses() {
-      if (this.filter) {
-        return this.fCourses
+      if (this.filterExists) {
+        return this.filteredCourses
       } else {
         return this.getCourses
       }
+    },
+    noCoursesFound() {
+      if (this.filterExists && this.filteredCourses.length == 0) {
+        return true
+      }
+    },
+    filterExists() {
+      return Object.values(this.filter).some(property => property.length > 0)
     }
   },
   created() {
@@ -44,6 +60,8 @@ export default {
     color: var(--color-primary);
     font-size: var(--font-s);
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .08rem;
     padding: 2rem 0 1rem 0;
   }
 
@@ -54,6 +72,13 @@ export default {
     @media only screen and (max-width: 800px) {
       height: 20vh;
     }
+  }
+
+  &__no-courses-found {
+    color: var(--color-grey-dark-2);
+    font-size: var(--font-m);
+    text-align: center;
+    margin-top: 2rem;
   }
 }
 </style>

@@ -1,7 +1,11 @@
 <template lang="html">
   <div class="week">
-    <!-- <p v-if="totalHours" class="week__total-hours">{{ totalHours }} Hours</p> -->
     <div class="week__days">
+      <div class="week__hours">
+        <div v-for="n in 14">
+          {{ (n < 5 ? n + 7 + 'am' : n == 5 ? n + 7 + 'pm' : n - 5 + 'pm') }}
+        </div>
+      </div>
       <div
         v-for="(day, index) in days"
         class="week__day"
@@ -11,12 +15,15 @@
         <app-courses :day="index"></app-courses>
       </div>
     </div>
+
+    <app-selected-courses></app-selected-courses>
   </div>
 </template>
 
 <script>
 import Courses from './Courses.vue'
-import { mapGetters, mapActions } from 'vuex'
+import SelectedCourses from './SelectedCourses.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -41,8 +48,6 @@ export default {
   methods: {
     hideWeekend(dayIndex) {
       if (dayIndex == 0 || dayIndex == 6) {
-        console.log('THIS IS A WEEKEND')
-
         let n = dayIndex + 1
         let day = `day${n}_start`
 
@@ -59,7 +64,8 @@ export default {
     }
   },
   components: {
-    appCourses: Courses
+    appCourses: Courses,
+    appSelectedCourses: SelectedCourses
   }
 }
 </script>
@@ -67,17 +73,13 @@ export default {
 <style lang="scss" scoped>
 .week {
   flex: 2;
-  height: 90vh;
-  padding: 3rem;
-
-  &__header,
-  &__total-hours {
-    text-align: center;
-  }
+  min-height: 90vh;
 
   &__days {
     display: flex;
     justify-content: space-around;
+    padding: 3rem;
+
   }
 
   &__day {
@@ -86,7 +88,20 @@ export default {
       justify-content: center;
       color: var(--color-grey-dark-2);
       font-size: var(--font-s);
+      font-weight: 400;
     }
+  }
+
+  &__hours {
+    display: grid;
+    grid-template-columns: 3rem;
+    grid-auto-rows: 5rem;
+
+    color: var(--color-grey-dark-2);
+    font-size: var(--font-xs);
+    margin-top: 3rem;
+    margin-right: 1rem;
+    position: relative;
   }
 }
 </style>
