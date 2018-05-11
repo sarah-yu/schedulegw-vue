@@ -8,15 +8,12 @@
     :class="`course-block--day${day}`">
       <span
         class="course-block__name">{{ course.course_name }}</span>
-        <span
-          v-if="!showFinalInfo"
-          class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
-      <!-- <div v-if="showFinalInfo" > -->
-        <!-- <span class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span> -->
-        <span
-          v-else
-          class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
-      <!-- </div> -->
+      <span
+        v-if="!showFinalInfo"
+        class="course-block__time">{{ course[`day${day+1}_start`] }} - {{ course[`day${day+1}_end`] }}</span>
+      <span
+        v-else
+        class="course-block__final-info">Finals: {{ finalInfo(course.final_date) }} at {{ finalInfo(course.final_time) }}</span>
     <div class="course-block__remove"><i class="fas fa-times"></i></div>
   </div>
 </template>
@@ -110,9 +107,6 @@ export default {
   font-size: var(--font-s);
   padding: .4rem;
   position: absolute;
-  overflow: scroll;
-  width: 100%;
-  z-index: 2;
   width: 100%;
   z-index: 2;
 
