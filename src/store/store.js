@@ -114,7 +114,7 @@ export default new Vuex.Store({
         .catch(err => console.log(err))
     },
     LOAD_SCHEDULES: (state, schedules) => {
-      state.schedules = schedules.data
+      state.schedules = schedules
     }
   },
   actions: {
@@ -200,15 +200,36 @@ export default new Vuex.Store({
     clearFilter: ({ commit }) => commit('CLEAR_FILTER'),
     saveSchedule: ({ commit }) => commit('SAVE_SCHEDULE'),
     loadSchedules: ({ commit }) => {
+      let schedulesWithCourses
       axios
         .get('/schedules')
-        .then(schedules => commit('LOAD_SCHEDULES', schedules))
+        .then(schedules => {
+          let schedulesWithCourses = schedules.data.map(schedule => {
+            let courses = []
+            schedule.courses.map(courseId => {
+              axios
+                .get(`/courses/${courseId}`)
+                .then(course => courses.push(course.data))
+                .catch(err => console.log(err))
+            })
+            return {
+              courses: courses,
+              name: schedule.name,
+              id: schedule._id // mongodb id -- change this for production
+            }
+          })
+
+          commit('LOAD_SCHEDULES', schedulesWithCourses)
+        })
         .catch(err => console.log(err))
     },
     deleteSchedule: ({ commit }, scheduleId) => {
       axios
         .delete(`/schedules/${scheduleId}`)
-        .then(res => console.log(res.data))
+        .then(res => {
+          console.log('HERE!!!') // why is this not printing
+          console.log(res.data)
+        })
         .catch(err => console.log(err))
     },
     editSchedule: ({ commit }, [scheduleId, newName]) => {

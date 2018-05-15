@@ -9,7 +9,7 @@
       </div>
     </div>
     <div
-      v-for="course in courses"
+      v-for="course in schedule.courses"
       class="schedule__courses">
       <div class="schedule__course">
         <p class="schedule__course-info">{{ course.crn }} {{ course.gwid }}-{{ course.section }} {{ course.course_name }}</p>
@@ -26,7 +26,6 @@
       </div>
       <div class="schedule__course-actions--right">
         <button class="schedule__action schedule__action--email">Email</button>
-        <button class="schedule__action schedule__action--share">Share</button>
       </div>
     </div>
   </div>
@@ -40,31 +39,18 @@ export default {
   props: ['schedule'],
   data() {
     return {
-      courses: [],
       isEditing: false
     }
   },
   methods: {
     ...mapActions(['deleteSchedule', 'editSchedule']),
     removeSchedule() {
-      this.deleteSchedule(this.schedule._id)
+      this.deleteSchedule(this.schedule.id)
       this.$router.push('/schedules')
     },
     saveName() {
-      this.editSchedule([this.schedule._id, this.schedule.name])
+      this.editSchedule([this.schedule.id, this.schedule.name])
     }
-  },
-  created() {
-    let courses = []
-
-    this.schedule.courses.map(courseId => {
-      axios
-        .get(`/courses/${courseId}`)
-        .then(course => courses.push(course.data))
-        .catch(err => console.log(err))
-    })
-
-    this.courses = courses
   }
 }
 </script>
@@ -90,9 +76,12 @@ export default {
   }
 
   &__name-edit-input {
+    border: none;
+    border-bottom: 1px solid var(--color-grey-light-3);
+    color: var(--color-primary);
     font-family: var(--font-primary);
     font-size: var(--font-xl);
-    padding: .5rem 1rem;
+    padding: .5rem 0;
 
     &:focus {
       outline: none;
@@ -186,8 +175,7 @@ export default {
       }
     }
 
-    &--email,
-    &--share {
+    &--email {
       color: var(--color-primary-light);
       background-color: #fff;
 
